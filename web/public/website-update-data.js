@@ -19,6 +19,7 @@ export async function loadWebsiteUpdates() {
   const localApi = new URL("api/website-updates", document.baseURI);
   localApi.searchParams.set("v", Date.now().toString());
   const staticApi = new URL("api/website-updates.json", document.baseURI);
+  staticApi.searchParams.set("v", Date.now().toString());
 
   for (const source of [localApi, staticApi]) {
     try {

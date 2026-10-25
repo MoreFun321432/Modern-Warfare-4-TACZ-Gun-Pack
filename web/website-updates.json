@@ -1,6 +1,20 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.6",
+      "title": "修复网页更新记录缓存",
+      "publishedAt": "2026-10-25T13:12:08Z",
+      "summary": "网页更新数据请求增加版本参数，避免 GitHub Pages 或浏览器继续显示旧的日志快照。",
+      "changes": [
+        "本地 API 与静态 JSON 请求均加入实时缓存参数。",
+        "新增网页日志后可立即刷新显示。"
+      ],
+      "bugFixes": [
+        "修复新增网页更新记录可能被旧缓存覆盖的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.5",
       "title": "版本状态卡片改为当前版本概览",
       "publishedAt": "2026-10-25T13:11:02Z",
