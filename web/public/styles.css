@@ -187,6 +187,7 @@ main {
 .hero h1 span {
   color: transparent;
   -webkit-text-stroke: 1px rgba(238, 242, 231, 0.58);
+  letter-spacing: 0.82px;
   paint-order: stroke fill;
   text-rendering: geometricPrecision;
 }
