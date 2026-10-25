@@ -1,7 +1,7 @@
 import {
   formatWebsiteUpdateDate,
   loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-2";
+} from "./website-update-data.js?v=20261025-3";
 
 const list = document.querySelector("#website-update-list");
 const count = document.querySelector("#website-release-count");

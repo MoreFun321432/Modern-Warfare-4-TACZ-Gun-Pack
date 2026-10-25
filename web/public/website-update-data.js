@@ -54,7 +54,7 @@ export function createHomepageWebsiteUpdate(update) {
   const summary = document.createElement("p");
   summary.textContent = update.summary || "查看本次网页版本包含的完整变更。";
   const link = document.createElement("a");
-  link.href = `./website-updates.html#web-update-${update.id}`;
+  link.href = `./website-updates.html?v=20261025-8#web-update-${update.id}`;
   link.textContent = "查看完整记录";
 
   article.append(meta, heading, summary, link);
