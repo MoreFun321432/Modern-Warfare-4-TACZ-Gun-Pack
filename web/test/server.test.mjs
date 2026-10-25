@@ -81,8 +81,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 3);
-  assert.equal(updates[0].id, "website-v1.0.2");
+  assert.ok(updates.length >= 4);
+  assert.equal(updates[0].id, "website-v1.0.4");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -111,7 +111,10 @@ test("serves health and local gun pack data", async (t) => {
 
   const pageResponse = await fetch(baseUrl);
   assert.equal(pageResponse.status, 200);
-  assert.match(await pageResponse.text(), /Modern Warfare 4/);
+  const pageHtml = await pageResponse.text();
+  assert.match(pageHtml, /Modern Warfare 4/);
+  assert.match(pageHtml, /id="website-log"/);
+  assert.match(pageHtml, /id="homepage-website-updates"/);
 
   const changelogResponse = await fetch(`${baseUrl}/changelog.html`);
   assert.equal(changelogResponse.status, 200);

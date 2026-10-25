@@ -32,6 +32,7 @@ const staticFiles = new Map([
   ["/app.js", { file: "app.js", type: "text/javascript; charset=utf-8" }],
   ["/changelog.js", { file: "changelog.js", type: "text/javascript; charset=utf-8" }],
   ["/website-updates.js", { file: "website-updates.js", type: "text/javascript; charset=utf-8" }],
+  ["/website-update-data.js", { file: "website-update-data.js", type: "text/javascript; charset=utf-8" }],
   ["/release-data.js", { file: "release-data.js", type: "text/javascript; charset=utf-8" }]
 ]);
 

@@ -4,6 +4,10 @@ import {
   loadReleases,
   pickPackRelease
 } from "./release-data.js?v=20261025-5";
+import {
+  createHomepageWebsiteUpdate,
+  loadWebsiteUpdates
+} from "./website-update-data.js?v=20261025-1";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),
@@ -20,6 +24,7 @@ const elements = {
   downloadAccelerated: document.querySelector("#download-accelerated"),
   downloadDirect: document.querySelector("#download-direct"),
   recentReleases: document.querySelector("#recent-releases"),
+  homepageWebsiteUpdates: document.querySelector("#homepage-website-updates"),
   repoLinks: [
     document.querySelector("#repo-nav-link"),
     document.querySelector("#repo-panel-link")
@@ -245,6 +250,32 @@ async function loadRecentReleases() {
   }
 }
 
+async function loadHomepageWebsiteUpdates() {
+  try {
+    const updates = await loadWebsiteUpdates();
+    elements.homepageWebsiteUpdates.replaceChildren();
+    if (updates.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "loading-panel";
+      empty.textContent = "暂时没有网页更新记录。";
+      elements.homepageWebsiteUpdates.append(empty);
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    updates.slice(0, 3).forEach((update) => fragment.append(createHomepageWebsiteUpdate(update)));
+    elements.homepageWebsiteUpdates.append(fragment);
+  } catch (error) {
+    console.error(error);
+    elements.homepageWebsiteUpdates.replaceChildren();
+    const empty = document.createElement("div");
+    empty.className = "loading-panel";
+    empty.textContent = "网页更新记录暂时无法载入。";
+    elements.homepageWebsiteUpdates.append(empty);
+  }
+}
+
 applyDownloadLinks(releasesUrl);
 loadStatus();
 loadRecentReleases();
+loadHomepageWebsiteUpdates();

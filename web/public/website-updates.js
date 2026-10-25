@@ -1,37 +1,10 @@
+import {
+  formatWebsiteUpdateDate,
+  loadWebsiteUpdates
+} from "./website-update-data.js?v=20261025-1";
+
 const list = document.querySelector("#website-update-list");
 const count = document.querySelector("#website-release-count");
-const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit"
-});
-
-function formatDate(value) {
-  const date = new Date(value || 0);
-  return Number.isNaN(date.getTime()) ? "--" : dateFormatter.format(date);
-}
-
-async function fetchJson(url) {
-  const response = await fetch(url, { headers: { Accept: "application/json" } });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return response.json();
-}
-
-async function loadWebsiteUpdates() {
-  const localApi = new URL("api/website-updates", document.baseURI);
-  localApi.searchParams.set("v", Date.now().toString());
-  const staticApi = new URL("api/website-updates.json", document.baseURI);
-
-  for (const source of [localApi, staticApi]) {
-    try {
-      const payload = await fetchJson(source);
-      if (Array.isArray(payload.updates)) return payload.updates;
-    } catch (error) {
-      console.info(`Website update source unavailable: ${source}`, error.message);
-    }
-  }
-  return [];
-}
 
 function createChangeSection(title, items) {
   if (!Array.isArray(items) || items.length === 0) return null;
@@ -64,7 +37,7 @@ function createWebsiteUpdateEntry(update) {
   heading.textContent = update.title;
   const time = document.createElement("time");
   time.dateTime = update.publishedAt || "";
-  time.textContent = formatDate(update.publishedAt);
+  time.textContent = formatWebsiteUpdateDate(update.publishedAt);
   copy.append(version, heading, time);
 
   const actions = document.createElement("div");
@@ -100,9 +73,7 @@ function createWebsiteUpdateEntry(update) {
 
 async function renderWebsiteUpdates() {
   try {
-    const updates = (await loadWebsiteUpdates()).sort((left, right) =>
-      new Date(right.publishedAt || 0).getTime() - new Date(left.publishedAt || 0).getTime()
-    );
+    const updates = await loadWebsiteUpdates();
     count.textContent = `${updates.length} 次网页更新`;
     list.replaceChildren();
 
