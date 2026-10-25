@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.7",
+      "title": "修复 GitHub API 限流导致网页显示离线",
+      "publishedAt": "2026-10-25T13:15:16Z",
+      "summary": "枪包数据改为优先读取 GitHub Pages 静态快照，GitHub API 仅作为可选增强信息源。",
+      "changes": [
+        "构建时生成 api/repository.json 仓库状态快照。",
+        "枪包、Release 和仓库状态优先读取静态数据。",
+        "GitHub API 返回 401、403 或网络失败时不再阻断枪包页面。"
+      ],
+      "bugFixes": [
+        "修复 GitHub API 触发匿名限流后首页误报“网页后端暂时无法连接”的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.6",
       "title": "修复网页更新记录缓存",
       "publishedAt": "2026-10-25T13:12:08Z",

@@ -5,7 +5,7 @@ import {
   loadPackReleases,
   releaseAnchor,
   renderReleaseNotes
-} from "./release-data.js?v=20261025-5";
+} from "./release-data.js?v=20261025-6";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");

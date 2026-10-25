@@ -3,7 +3,7 @@ import {
   loadPackReleases,
   loadReleases,
   pickPackRelease
-} from "./release-data.js?v=20261025-5";
+} from "./release-data.js?v=20261025-6";
 import {
   createHomepageWebsiteUpdate,
   loadWebsiteUpdates
@@ -175,7 +175,9 @@ async function loadFromGitHubPages() {
   };
   const [gunpack, repositoryResult, releases] = await Promise.all([
     fetchJson(new URL("api/gunpack.json", document.baseURI)),
-    fetchJson(apiBase, { headers }),
+    fetchJson(new URL("api/repository.json", document.baseURI))
+      .catch(() => fetchJson(apiBase, { headers }))
+      .catch(() => null),
     loadReleases()
   ]);
   const packRelease = pickPackRelease(releases);

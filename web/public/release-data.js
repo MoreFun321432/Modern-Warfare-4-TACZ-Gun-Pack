@@ -86,9 +86,10 @@ async function fetchJson(url, options = {}) {
 export async function loadReleases() {
   const localApi = new URL("api/releases", document.baseURI);
   const staticApi = new URL("api/releases.json", document.baseURI);
+  staticApi.searchParams.set("v", Date.now().toString());
   const githubApi = `https://api.github.com/repos/${repositoryConfig.owner}/${repositoryConfig.repo}/releases?per_page=30`;
 
-  for (const source of [localApi, githubApi, staticApi]) {
+  for (const source of [localApi, staticApi, githubApi]) {
     try {
       const payload = await fetchJson(source, {
         headers: { Accept: "application/json" }

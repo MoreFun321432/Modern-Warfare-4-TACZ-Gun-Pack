@@ -35,6 +35,44 @@ export async function fetchStaticReleases({
   }
 }
 
+export async function fetchStaticRepository({
+  owner = repositoryOwner,
+  repo = repositoryName,
+  token = process.env.GITHUB_TOKEN
+} = {}) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "mw4-gunpack-pages-build",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`,
+      { headers, signal: AbortSignal.timeout(10_000) }
+    );
+    if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+    const repository = await response.json();
+    return {
+      owner,
+      name: repository.name,
+      fullName: repository.full_name,
+      url: repository.html_url,
+      description: repository.description,
+      defaultBranch: repository.default_branch,
+      stars: repository.stargazers_count,
+      forks: repository.forks_count,
+      openIssues: repository.open_issues_count,
+      updatedAt: repository.updated_at,
+      pushedAt: repository.pushed_at
+    };
+  } catch (error) {
+    console.warn(`Could not snapshot GitHub repository status: ${error.message}`);
+    return null;
+  }
+}
+
 export function toStaticManifest(manifest) {
   return {
     ...manifest,
@@ -60,13 +98,15 @@ export async function buildStaticSite() {
     }
   }
 
-  const [manifest, releases] = await Promise.all([
+  const [manifest, releases, repository] = await Promise.all([
     readGunPackManifest(),
-    fetchStaticReleases()
+    fetchStaticReleases(),
+    fetchStaticRepository()
   ]);
   const staticManifest = toStaticManifest(manifest);
   await writeFile(join(distDir, "api", "gunpack.json"), `${JSON.stringify(staticManifest, null, 2)}\n`, "utf8");
   await writeFile(join(distDir, "api", "releases.json"), `${JSON.stringify(releases, null, 2)}\n`, "utf8");
+  await writeFile(join(distDir, "api", "repository.json"), `${JSON.stringify(repository, null, 2)}\n`, "utf8");
   await cp(join(webDir, "website-updates.json"), join(distDir, "api", "website-updates.json"));
 
   const iconNames = new Set(manifest.guns.map((gun) => `${gun.id}.png`));
