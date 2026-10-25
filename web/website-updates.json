@@ -1,6 +1,19 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.17",
+      "title": "同步 GitHub 新用户名 Skydeps1459",
+      "publishedAt": "2026-10-25T14:01:49Z",
+      "summary": "GitHub 用户名从 MoreFun321432 更新为 Skydeps1459，仓库与 Pages 域名同步迁移。",
+      "changes": [
+        "GitHub 仓库地址改为 Skydeps1459/Modern-Warfare-4-TACZ-GunPack。",
+        "GitHub Pages 地址改为 skydeps1459.github.io/Modern-Warfare-4-TACZ-GunPack。",
+        "网站配置、API 请求、Release、下载和文档链接全部同步。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.16",
       "title": "仓库名称改为 Modern Warfare 4 TACZ GunPack",
       "publishedAt": "2026-10-25T13:58:47Z",
@@ -226,7 +239,7 @@
         "网页版 Release 不替换枪包下载目标。"
       ],
       "bugFixes": [],
-      "releaseUrl": "https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-GunPack/releases/tag/website-v1.0.0"
+      "releaseUrl": "https://github.com/Skydeps1459/Modern-Warfare-4-TACZ-GunPack/releases/tag/website-v1.0.0"
     }
   ]
 }

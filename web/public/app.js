@@ -32,7 +32,7 @@ const elements = {
 };
 
 const repositoryConfig = {
-  owner: "MoreFun321432",
+  owner: "Skydeps1459",
   repo: "Modern-Warfare-4-TACZ-GunPack"
 };
 

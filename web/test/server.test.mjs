@@ -82,8 +82,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 16);
-  assert.equal(updates[0].id, "website-v1.0.16");
+  assert.ok(updates.length >= 17);
+  assert.equal(updates[0].id, "website-v1.0.17");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });

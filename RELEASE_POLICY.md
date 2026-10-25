@@ -1,7 +1,7 @@
 # GitHub release policy
 
 This policy applies to every update pushed to
-`MoreFun321432/Modern-Warfare-4-TACZ-GunPack`.
+`Skydeps1459/Modern-Warfare-4-TACZ-GunPack`.
 
 ## Bug-fix hotfixes
 
