@@ -6,8 +6,10 @@ import {
   releaseAnchor,
   renderReleaseNotes
 } from "./release-data.js?v=20261025-8";
-import { loadDownloadConfig } from "./download-config.js?v=20261025-1";
-import { loadDomesticMirror } from "./download-config.js?v=20261025-1";
+import {
+  loadDomesticMirror,
+  loadDownloadConfig
+} from "./download-config.js?v=20261025-2";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");

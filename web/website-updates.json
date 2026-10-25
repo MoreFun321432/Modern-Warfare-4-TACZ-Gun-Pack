@@ -1,6 +1,20 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.27",
+      "title": "修复蓝奏云模块脚本缓存",
+      "publishedAt": "2026-10-25T15:24:30Z",
+      "summary": "提升下载配置模块版本，确保浏览器立即加载蓝奏云分流新功能。",
+      "changes": [
+        "download-config.js 缓存版本升至 v2。",
+        "主页与枪包日志引用新的模块版本。"
+      ],
+      "bugFixes": [
+        "修复线上浏览器缓存旧模块后蓝奏云分流按钮不显示的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.26",
       "title": "加入蓝奏云分流与所有者后台",
       "publishedAt": "2026-10-25T15:22:25Z",
