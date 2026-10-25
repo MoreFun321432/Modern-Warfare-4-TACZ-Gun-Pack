@@ -16,6 +16,16 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 > Lite 包已冻结，本仓库只维护主包 `Modern Warfare 4`。仓库中的网页、API 和
 > GitHub 工作流不会被打进 TACZ 枪包 zip。
 
+## 发布规则
+
+- Bug 修复先在本地累计；满 **3 个独立且已验证的 bug 修复**后，才发布末位 +1
+  的 hotfix 版本。
+- 新增枪械默认不推送 GitHub、不更新 Pages、不发布 Release；只有用户明确要求
+  上传或发布时才执行。
+- 发布只针对主包，Lite 保持冻结。
+
+完整规则见 [`RELEASE_POLICY.md`](./RELEASE_POLICY.md)。
+
 ## 枪械
 
 | 类型 | 枪械 |
