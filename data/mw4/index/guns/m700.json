@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.m700.name",
+  "display": "mw4:m700_display",
+  "data": "mw4:m700_data",
+  "tooltip": "mw4.gun.m700.desc",
+  "type": "sniper",
+  "item_type": "modern_kinetic",
+  "sort": 12
+}

@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.fn_fal.name",
+  "display": "mw4:fn_fal_display",
+  "data": "mw4:fn_fal_data",
+  "tooltip": "mw4.gun.fn_fal.desc",
+  "type": "rifle",
+  "item_type": "modern_kinetic",
+  "sort": 18
+}

@@ -1,0 +1,6 @@
+{
+  "namespace": "mw4",
+  "dependencies": {
+    "tacz": "[1.1.4,)"
+  }
+}

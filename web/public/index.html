@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Modern Warfare 4 TACZ 枪包下载、版本与仓库信息。">
+    <meta name="theme-color" content="#0a0c0b">
+    <title>Modern Warfare 4 // TACZ Gun Pack</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Modern Warfare 4 首页">
+        <span class="brand-mark">MW</span>
+        <span class="brand-copy">
+          <strong>MODERN WARFARE 4</strong>
+          <small>TACZ GUN PACK</small>
+        </span>
+      </a>
+      <nav aria-label="导航">
+        <a href="#arsenal">军械库</a>
+        <a href="#install">安装</a>
+        <a id="repo-nav-link" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="pulse"></span> TACTICAL ARMORY / ONLINE</p>
+          <h1>准备进入<br><span>火力覆盖区</span></h1>
+          <p class="hero-text">
+            为主世界打造的 Modern Warfare 4 TACZ 枪包。统一模型、动画、音效与换弹逻辑，
+            从仓库获取最新版本，放进 <code>tacz</code> 目录即可部署。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/api/download">
+              <span>下载最新枪包</span>
+              <span class="button-arrow">↓</span>
+            </a>
+            <a class="button button-ghost" id="repo-hero-link" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack" rel="noreferrer">
+              查看源码
+            </a>
+          </div>
+          <dl class="hero-stats">
+            <div>
+              <dt>当前版本</dt>
+              <dd id="pack-version">读取中…</dd>
+            </div>
+            <div>
+              <dt>枪械数量</dt>
+              <dd id="gun-count">--</dd>
+            </div>
+            <div>
+              <dt>仓库 Stars</dt>
+              <dd id="repo-stars">--</dd>
+            </div>
+          </dl>
+        </div>
+
+        <aside class="deployment-card" aria-label="部署状态">
+          <div class="card-grid" aria-hidden="true"></div>
+          <div class="card-topline">
+            <span>DEPLOYMENT MANIFEST</span>
+            <span class="status-label">LIVE</span>
+          </div>
+          <div class="scope" aria-hidden="true">
+            <span class="scope-ring scope-ring-one"></span>
+            <span class="scope-ring scope-ring-two"></span>
+            <span class="scope-cross scope-cross-x"></span>
+            <span class="scope-cross scope-cross-y"></span>
+            <span class="scope-center"></span>
+          </div>
+          <div class="manifest-list">
+            <div><span>PACKAGE</span><strong id="manifest-version">MW4</strong></div>
+            <div><span>RELEASE</span><strong id="release-date">CHECKING</strong></div>
+            <div><span>LICENSE</span><strong>MIT</strong></div>
+            <div><span>NAMESPACE</span><strong>mw4</strong></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="ticker" aria-label="枪包信息">
+        <div>
+          <span>14 WEAPON PLATFORMS</span>
+          <span>5 AMMO CALIBERS</span>
+          <span>FORGE 1.20.1</span>
+          <span>TACZ 1.1.8</span>
+          <span>MIT LICENSED</span>
+          <span aria-hidden="true">14 WEAPON PLATFORMS</span>
+          <span aria-hidden="true">5 AMMO CALIBERS</span>
+          <span aria-hidden="true">FORGE 1.20.1</span>
+          <span aria-hidden="true">TACZ 1.1.8</span>
+          <span aria-hidden="true">MIT LICENSED</span>
+        </div>
+      </section>
+
+      <section class="section arsenal" id="arsenal">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CURRENT LOADOUT</p>
+            <h2>军械库</h2>
+          </div>
+          <p>数据直接读取仓库内的枪包索引，新增枪械后网页会自动同步。</p>
+        </div>
+        <div class="gun-grid" id="gun-grid" aria-live="polite">
+          <div class="loading-panel">正在载入枪包数据…</div>
+        </div>
+      </section>
+
+      <section class="section intel" id="install">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FIELD MANUAL</p>
+            <h2>三步部署</h2>
+          </div>
+          <p>适用于 Forge 1.20.1 + TACZ。更新前建议完全退出游戏，避免旧 zip 句柄被占用。</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <span class="step-number">01</span>
+            <div>
+              <h3>获取发布包</h3>
+              <p>下载 GitHub Release 中的 <code>Modern Warfare 4-&lt;版本&gt;.zip</code>。</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">02</span>
+            <div>
+              <h3>放入 TACZ</h3>
+              <p>把 zip 放进实例的 <code>.minecraft/tacz/</code> 目录，不要解压。</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-number">03</span>
+            <div>
+              <h3>重新载入</h3>
+              <p>启动游戏，或执行 <code>/tacz reload</code>；更新枪包时请重启客户端。</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="repository-panel">
+        <div>
+          <p class="eyebrow">SOURCE CONTROL</p>
+          <h2>仓库与发布同步</h2>
+          <p id="repository-description">后端通过 GitHub API 同步仓库状态、最近发布日期与下载资源。</p>
+        </div>
+        <div class="repo-metrics">
+          <div><span>REPOSITORY</span><strong id="repo-name">MoreFun321432 / Modern-Warfare-4-TACZ-Gun-Pack</strong></div>
+          <div><span>LAST PUSH</span><strong id="repo-updated">--</strong></div>
+          <div><span>DOWNLOAD ASSET</span><strong id="asset-size">--</strong></div>
+        </div>
+        <a class="button button-outline" id="repo-panel-link" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack" rel="noreferrer">打开 GitHub 仓库 ↗</a>
+      </section>
+    </main>
+
+    <footer>
+      <span>MODERN WARFARE 4 // TACZ</span>
+      <span>代码与文档以 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/LICENSE" rel="noreferrer">MIT License</a> 发布</span>
+    </footer>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
+

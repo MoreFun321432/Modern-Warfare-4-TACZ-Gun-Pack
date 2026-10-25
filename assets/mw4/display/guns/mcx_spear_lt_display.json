@@ -1,0 +1,111 @@
+{
+  "model": "mw4:gun/mcx_spear_lt_geo",
+  "texture": "mw4:gun/uv/mcx_spear_lt",
+  "uv": [
+    "mw4:gun/uv/mcx_spear_lt",
+    "mw4:gun/uv/mcx_spear_lt_n",
+    "mw4:gun/uv/mcx_spear_lt_s"
+  ],
+  "hud": "mw4:gun/hud/mcx_spear_lt",
+  "slot": "mw4:gun/slot/mcx_spear_lt",
+  "animation": "mw4:mcx_spear_lt",
+  "state_machine": "mw4:mcx_spear_lt_state_machine",
+  "use_default_animation": "rifle",
+  "third_person_animation": "default",
+  "transform": {
+    "scale": {
+      "thirdperson": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "ground": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fixed": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  },
+  "muzzle_flash": {
+    "texture": "tacz:flash/common_muzzle_flash",
+    "scale": 1.0
+  },
+  "iron_zoom": 1.5,
+  "shell": {
+    "initial_velocity": [
+      5,
+      2,
+      1
+    ],
+    "random_velocity": [
+      1,
+      1,
+      0.25
+    ],
+    "acceleration": [
+      0.0,
+      -10,
+      0.0
+    ],
+    "angular_velocity": [
+      360,
+      -1200,
+      90
+    ],
+    "living_time": 1.0
+  },
+  "sounds": {
+    "shoot": "mw4:mcx_spear_lt/weap_mcharlie_fire_plr_shot.lnn.85.48000.all",
+    "shoot_3p": "mw4:mcx_spear_lt/weap_mcharlie_fire_plr_shot.lnn.85.48000.all",
+    "silence": "mw4:mcx_spear_lt/weap_mcharlie_fire_plr_mech.lnn.85.48000.all",
+    "silence_3p": "mw4:mcx_spear_lt/weap_mcharlie_fire_plr_mech.lnn.85.48000.all",
+    "dry_fire": "tacz:dry_fire",
+    "fire_select": "",
+    "head_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "flesh_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "kill": "mw4:hitmarker/iw9_kill_alert.lnn.75.48000.all",
+    "melee_push": "tacz:melee_stock/melee_stock_01",
+    "melee_stock": "tacz:melee_stock/melee_stock_03"
+  },
+  "offhand_show": {
+    "pos": [
+      1,
+      20,
+      3.5
+    ],
+    "rotate": [
+      0,
+      0,
+      60
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [
+        -1,
+        20,
+        3
+      ],
+      "rotate": [
+        -180,
+        0,
+        120
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

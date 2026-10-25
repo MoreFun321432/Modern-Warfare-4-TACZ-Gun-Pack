@@ -1,0 +1,7 @@
+{
+  "slot": "mw4:attachment/slot/drum_mag",
+  "sounds": {
+    "install": "tacz:attachments/extended_mag_install",
+    "uninstall": "tacz:attachments/extended_mag_uninstall"
+  }
+}

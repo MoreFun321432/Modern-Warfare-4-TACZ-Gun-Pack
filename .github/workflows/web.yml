@@ -1,0 +1,30 @@
+name: Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "assets/mw4/gunpack_info.json"
+      - "assets/mw4/lang/**"
+      - "data/mw4/index/guns/**"
+      - ".github/workflows/web.yml"
+  pull_request:
+    paths:
+      - "web/**"
+      - "assets/mw4/gunpack_info.json"
+      - "assets/mw4/lang/**"
+      - "data/mw4/index/guns/**"
+      - ".github/workflows/web.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test website backend
+        run: node --test web/test/server.test.mjs
+

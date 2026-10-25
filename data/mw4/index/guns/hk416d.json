@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.hk416d.name",
+  "display": "mw4:hk416d_display",
+  "data": "mw4:hk416d_data",
+  "tooltip": "mw4.gun.hk416d.desc",
+  "type": "rifle",
+  "sort": 9,
+  "item_type": "modern_kinetic"
+}

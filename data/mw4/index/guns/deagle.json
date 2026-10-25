@@ -1,0 +1,8 @@
+{
+  "name": "mw4.gun.deagle.name",
+  "display": "mw4:deagle_display",
+  "data": "mw4:deagle_data",
+  "tooltip": "mw4.gun.deagle.desc",
+  "type": "pistol",
+  "sort": 2
+}

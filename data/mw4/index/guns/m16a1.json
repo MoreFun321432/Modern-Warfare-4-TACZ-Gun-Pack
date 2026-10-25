@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.m16a1.name",
+  "display": "mw4:m16a1_display",
+  "data": "mw4:m16a1_data",
+  "tooltip": "mw4.gun.m16a1.desc",
+  "type": "rifle",
+  "sort": 4,
+  "item_type": "modern_kinetic"
+}

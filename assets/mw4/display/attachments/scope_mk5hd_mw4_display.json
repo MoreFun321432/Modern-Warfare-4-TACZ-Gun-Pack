@@ -1,0 +1,48 @@
+{
+  "slot": "tacz:attachment/slot/scope_mk5hd_slot",
+  "model": "tacz:attachment/scope_mk5hd_geo",
+  "texture": "tacz:attachment/uv/scope_mk5hd",
+  "lod": {
+    "model": "tacz:attachment/lod/scope_mk5hd",
+    "texture": "tacz:attachment/lod/scope_mk5hd"
+  },
+  "zoom": [
+    5,
+    25,
+    1.25
+  ],
+  "views": [
+    2,
+    2,
+    1
+  ],
+  "views_fov": [
+    45.0,
+    38.0,
+    62.0
+  ],
+  "text_show": {
+    "ammo_count_text": {
+      "scale": 0.09375,
+      "align": "left",
+      "shadow": false,
+      "color": "#00ffff",
+      "light": 15,
+      "text": "%ammo_count%"
+    },
+    "custom_text_ammo": {
+      "scale": 0.0625,
+      "align": "center",
+      "shadow": false,
+      "color": "#ffffff",
+      "light": 15,
+      "text": "AMMO"
+    }
+  },
+  "scope": true,
+  "sight": true,
+  "sounds": {
+    "install": "tacz:attachments/scope_general_c",
+    "uninstall": "tacz:attachments/scope_general_c"
+  }
+}

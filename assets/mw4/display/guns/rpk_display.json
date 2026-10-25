@@ -1,0 +1,117 @@
+{
+  "model": "mw4:gun/rpk_geo",
+  "texture": "mw4:gun/uv/rpk",
+  "uv": [
+    "mw4:gun/uv/rpk",
+    "mw4:gun/uv/rpk_n",
+    "mw4:gun/uv/rpk_s"
+  ],
+  // ⚠️ 刻意不写 "lod"（用户 2026-10-16 反馈「第三人称下弹匣模型异常显示」）：
+  //    本包 RPK 的可见弹匣是三级弹鼓（MAG_SWAP 把 mag_extended_3 改名成 mag_standard、其余档位改名成 *_discard），
+  //    而官方 LOD 低模（mw4:gun/lod/rpk）把弹匣**烘在主网格 `lod` 的 cube 里**、没有任何弹匣骨骼
+  //    ⇒ 走 LOD 时第三人称显示的是低模自带的那只弹匣（不是弹鼓）。
+  //    用户实例的 TACZ 配置 `GunLodRenderDistance = 0`（0 = 永远用 LOD，见 config/tacz-client.toml）
+  //    ⇒ 只能去掉 LOD 改走主模型；与 deagle / mrad 的做法一致（它们的 display 也没有 "lod" 键）。
+  "hud": "mw4:gun/hud/rpk",
+  "slot": "mw4:gun/slot/rpk",
+  "animation": "mw4:rpk",
+  "state_machine": "mw4:rpk_state_machine",
+  "use_default_animation": "rifle",
+  "third_person_animation": "default",
+  "transform": {
+    "scale": {
+      "thirdperson": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "ground": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fixed": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  },
+  "muzzle_flash": {
+    "texture": "tacz:flash/common_muzzle_flash",
+    "scale": 0.75
+  },
+  "iron_zoom": 1.33,
+  "shell": {
+    "initial_velocity": [
+      5,
+      2,
+      1
+    ],
+    "random_velocity": [
+      1,
+      1,
+      0.25
+    ],
+    "acceleration": [
+      0.0,
+      -10,
+      0.0
+    ],
+    "angular_velocity": [
+      360,
+      -1200,
+      90
+    ],
+    "living_time": 1.0
+  },
+  "sounds": {
+    "shoot": "mw4:rpk/weap_akilo_fire_plr_shot.lnn.85.48000.all",
+    "shoot_3p": "mw4:rpk/weap_akilo_fire_plr_shot.lnn.85.48000.all",
+    "silence": "mw4:rpk/weap_akilo_fire_plr_mech.lnn.85.48000.all",
+    "silence_3p": "mw4:rpk/weap_akilo_fire_plr_mech.lnn.85.48000.all",
+    "dry_fire": "tacz:dry_fire",
+    "fire_select": "",
+    "head_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "flesh_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "kill": "mw4:hitmarker/iw9_kill_alert.lnn.75.48000.all",
+    "melee_push": "tacz:melee_stock/melee_stock_02",
+    "melee_stock": "tacz:melee_stock/melee_stock_03"
+  },
+  "offhand_show": {
+    "pos": [
+      1,
+      20,
+      3.5
+    ],
+    "rotate": [
+      0,
+      0,
+      60
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [
+        -1,
+        20,
+        3
+      ],
+      "rotate": [
+        -180,
+        0,
+        120
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

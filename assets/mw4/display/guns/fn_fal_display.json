@@ -1,0 +1,136 @@
+{
+  "model": "mw4:gun/fn_fal_geo",
+  "texture": "mw4:gun/uv/fn_fal",
+  "lod": {
+    "model": "tacz:gun/lod/fn_fal",
+    "texture": "tacz:gun/lod/fn_fal"
+  },
+  "hud": "mw4:gun/hud/fn_fal",
+  "slot": "mw4:gun/slot/fn_fal",
+  "ammo_count_style": "normal",
+  "damage_style": "per_projectile",
+  "animation": "mw4:fn_fal",
+  "state_machine": "mw4:fn_fal_state_machine",
+  "use_default_animation": "rifle",
+  "third_person_animation": "default",
+  "player_animator_3rd": "tacz:rifle_default.player_animation",
+  "show_crosshair": false,
+  "transform": {
+    "scale": {
+      "thirdperson": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "ground": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fixed": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  },
+  "muzzle_flash": {
+    "type": "renew",
+    "texture": "tacz:flash/common_muzzle_flash",
+    "scale": 0.75,
+    "initial_speed_scale": 0.75
+  },
+  "iron_zoom": 1.5,
+  "shell": {
+    "initial_velocity": [
+      7.5,
+      2,
+      -2.5
+    ],
+    "random_velocity": [
+      3.5,
+      1.5,
+      0.25
+    ],
+    "acceleration": [
+      -1.5,
+      -10,
+      0.0
+    ],
+    "angular_velocity": [
+      360,
+      -1200,
+      90
+    ],
+    "living_time": 1.0
+  },
+  "ammo": {
+    "tracer_color": "#FF8888"
+  },
+  "sounds": {
+    "shoot": "mw4:fn_fal/shoot",
+    "shoot_3p": "mw4:fn_fal/shoot_3p",
+    "silence": "mw4:fn_fal/silence",
+    "silence_3p": "mw4:fn_fal/silence_3p",
+    "dry_fire": "tacz:dry_fire",
+    "head_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "flesh_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "kill": "mw4:hitmarker/iw9_kill_alert.lnn.75.48000.all",
+    "melee_push": "tacz:melee_stock/melee_stock_01",
+    "put_away": "mw4:fn_fal/wfoly_plr_ar_falima_drop_down.ln.75.44100.all",
+    "fire_select": ""
+  },
+  "offhand_show": {
+    "pos": [
+      3,
+      22.5,
+      3.5
+    ],
+    "rotate": [
+      0,
+      0,
+      60
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [
+        -3,
+        22.5,
+        3
+      ],
+      "rotate": [
+        -180,
+        0,
+        120
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "controllable": {
+    "semi": {
+      "low_frequency": 0.25,
+      "high_frequency": 0.5,
+      "time": 100
+    },
+    "auto": {
+      "low_frequency": 0.15,
+      "high_frequency": 0.25,
+      "time": 80
+    },
+    "burst": {
+      "low_frequency": 0.25,
+      "high_frequency": 0.5,
+      "time": 100
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "mw4.gun.mrad.name",
+  "display": "mw4:mrad_display",
+  "data": "mw4:mrad_data",
+  "tooltip": "mw4.gun.mrad.desc",
+  "type": "sniper",
+  "sort": 8
+}

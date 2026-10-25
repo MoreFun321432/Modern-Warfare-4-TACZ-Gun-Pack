@@ -1,0 +1,30 @@
+{
+  "model": "mw4:ammo/45acp",
+  "texture": "mw4:ammo/uv/45acp",
+  "slot": "mw4:ammo/slot/45acp",
+  "tracer_color": "#ffb373",
+  "shell": {
+    "model": "mw4:shell/45acp_shell",
+    "texture": "mw4:shell/45acp_shell"
+  },
+  "transform": {
+    "scale": {
+      "thirdperson": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "ground": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fixed": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  }
+}
+    

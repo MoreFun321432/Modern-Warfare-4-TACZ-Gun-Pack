@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.mcx_spear_lt.name",
+  "display": "mw4:mcx_spear_lt_display",
+  "data": "mw4:mcx_spear_lt_data",
+  "tooltip": "mw4.gun.mcx_spear_lt.desc",
+  "type": "rifle",
+  "item_type": "modern_kinetic",
+  "sort": 19
+}

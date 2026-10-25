@@ -1,0 +1,8 @@
+{
+  "name": "mw4.gun.mk23.name",
+  "display": "mw4:mk23_display",
+  "data": "mw4:mk23_data",
+  "tooltip": "mw4.gun.mk23.desc",
+  "type": "pistol",
+  "sort": 11
+}

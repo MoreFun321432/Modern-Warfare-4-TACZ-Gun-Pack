@@ -1,0 +1,16 @@
+{
+  "name": "mw4-gunpack-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Repository-linked website and API for the Modern Warfare 4 TACZ gun pack.",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
+

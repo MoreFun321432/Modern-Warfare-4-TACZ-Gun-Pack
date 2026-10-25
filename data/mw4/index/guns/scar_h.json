@@ -1,0 +1,8 @@
+{
+  "name": "mw4.gun.scar_h.name",
+  "display": "mw4:scar_h_display",
+  "data": "mw4:scar_h_data",
+  "tooltip": "mw4.gun.scar_h.desc",
+  "type": "rifle",
+  "sort": 6
+}

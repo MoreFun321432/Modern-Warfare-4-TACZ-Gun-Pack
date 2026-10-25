@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.ak47.name",
+  "display": "mw4:ak47_display",
+  "data": "mw4:ak47_data",
+  "tooltip": "mw4.gun.ak47.desc",
+  "type": "rifle",
+  "sort": 5,
+  "item_type": "modern_kinetic"
+}

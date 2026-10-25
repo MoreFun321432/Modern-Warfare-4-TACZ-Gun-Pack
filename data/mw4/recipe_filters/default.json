@@ -1,0 +1,6 @@
+{
+  "whitelist": [
+    "^mw4:.*$"
+  ],
+  "blacklist": []
+}

@@ -1,0 +1,7 @@
+{
+  "name": "mw4.attachment.scope_vudu_mw4.name",
+  "display": "mw4:scope_vudu_mw4_display",
+  "data": "mw4:scope_vudu_mw4_data",
+  "type": "scope",
+  "sort": 100
+}

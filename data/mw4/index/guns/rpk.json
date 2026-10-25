@@ -1,0 +1,9 @@
+{
+  "name": "mw4.gun.rpk.name",
+  "display": "mw4:rpk_display",
+  "data": "mw4:rpk_data",
+  "tooltip": "mw4.gun.rpk.desc",
+  "type": "mg",
+  "item_type": "modern_kinetic",
+  "sort": 11
+}

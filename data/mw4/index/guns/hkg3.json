@@ -1,0 +1,8 @@
+{
+  "name": "mw4.gun.hkg3.name",
+  "display": "mw4:hkg3_display",
+  "data": "mw4:hkg3_data",
+  "tooltip": "mw4.gun.hkg3.desc",
+  "type": "rifle",
+  "sort": 10
+}

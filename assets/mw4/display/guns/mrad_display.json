@@ -1,0 +1,122 @@
+{
+  "model": "mw4:gun/mrad_geo",
+  "texture": "mw4:gun/uv/mrad",
+  "hud": "mw4:gun/hud/mrad",
+  "slot": "mw4:gun/slot/mrad",
+  "animation": "mw4:mrad",
+  "use_default_animation": "rifle",
+  "state_machine": "mw4:mrad_state_machine",
+  "state_machine_param": {
+    "bolt_shell_ejecting_time": 0.4,
+    "reload_empty_shell_ejecting_time": 0.54
+  },
+  "transform": {
+    "scale": {
+      "thirdperson": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "ground": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "fixed": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  },
+  "muzzle_flash": {
+    "type": "renew",
+    "texture": "tacz:flash/common_muzzle_flash",
+    "scale": 1,
+    "initial_speed_scale": 1.5,
+    "smoke_particle_count": 25
+  },
+  "iron_zoom": 1.25,
+  "zoom_model_fov": 40,
+  "shell": {
+    "initial_velocity": [
+      8,
+      2,
+      -7
+    ],
+    "random_velocity": [
+      2,
+      1,
+      0.5
+    ],
+    "acceleration": [
+      0.0,
+      -20,
+      0.0
+    ],
+    "angular_velocity": [
+      360,
+      -1200,
+      90
+    ],
+    "living_time": 1.0
+  },
+  "sounds": {
+    "shoot": "mw4:mrad/weap_mromeo_fire_plr_mech_ads_01.lnn.85.48000.all",
+    "shoot_3p": "mw4:mrad/weap_mromeo_fire_plr_mech_ads_01.lnn.85.48000.all",
+    "silence": "mw4:mrad/mrad_shoot_silence",
+    "silence_3p": "mw4:mrad/mrad_shoot_silence",
+    "dry_fire": "tacz:dry_fire",
+    "fire_select": "tacz:fire_select",
+    "head_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "flesh_hit": "mw4:hitmarker/mp_hit_indication_3c.lnn.75.48000.all",
+    "kill": "mw4:hitmarker/iw9_kill_alert.lnn.75.48000.all",
+    "melee_push": "tacz:melee_stock/melee_stock_02",
+    "melee_stock": "tacz:melee_stock/melee_stock_03",
+    "draw": "mw4:mrad/p21_sn_mromeo_raise_rattle.lnn.75.48000.all",
+    "put_away": "mw4:mrad/p21_sn_mromeo_drop_rattle.lnn.75.48000.all"
+  },
+  "offhand_show": {
+    "pos": [
+      6,
+      18,
+      3
+    ],
+    "rotate": [
+      -90,
+      -5,
+      -90
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [
+        -4,
+        18,
+        3
+      ],
+      "rotate": [
+        -90,
+        -5,
+        -90
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "controllable": {
+    "semi": {
+      "low_frequency": 1,
+      "high_frequency": 1,
+      "time": 200
+    }
+  }
+}

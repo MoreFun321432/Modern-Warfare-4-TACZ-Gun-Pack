@@ -1,0 +1,20 @@
+{
+  // 模型：assets/mw4/geo_models/ammo/556x45.json
+  "model": "mw4:ammo/556x45",
+  // 贴图：assets/mw4/textures/ammo/uv/556x45.png（当前为占位贴图）
+  "texture": "mw4:ammo/uv/556x45",
+  "slot": "mw4:ammo/slot/556x45",
+  // 弹壳模型/贴图引用默认枪包
+  "shell": {
+    "model": "tacz:shell/556x45_shell",
+    "texture": "tacz:shell/556x45_shell"
+  },
+  "tracer_color": "#FF8888",
+  "transform": {
+    "scale": {
+      "thirdperson": [0.6, 0.6, 0.6],
+      "ground": [0.6, 0.6, 0.6],
+      "fixed": [1.2, 1.2, 1.2]
+    }
+  }
+}

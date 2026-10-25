@@ -1,0 +1,27 @@
+{
+  "slot": "tacz:attachment/slot/scope_lpvo_1_6",
+  "model": "tacz:attachment/scope_lpvo_1_6_geo",
+  "texture": "tacz:attachment/uv/scope_lpvo_1_6",
+  "lod": {
+    "model": "tacz:attachment/lod/scope_lpvo_1_6",
+    "texture": "tacz:attachment/lod/scope_lpvo_1_6"
+  },
+  "zoom": [
+    6.25,
+    1.25
+  ],
+  "views": [
+    2,
+    2
+  ],
+  "views_fov": [
+    50.0,
+    62.0
+  ],
+  "scope": true,
+  "sight": false,
+  "sounds": {
+    "install": "tacz:attachments/scope_general_c",
+    "uninstall": "tacz:attachments/scope_general_c"
+  }
+}
