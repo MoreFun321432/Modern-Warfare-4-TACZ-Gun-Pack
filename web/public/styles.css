@@ -985,6 +985,7 @@ main {
 footer {
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 28px clamp(22px, 5vw, 72px);
   color: var(--dim);
@@ -1009,6 +1010,17 @@ footer .admin-entry {
 footer .admin-entry:hover {
   color: var(--acid);
   opacity: 1;
+}
+
+footer .site-credit {
+  flex-basis: 100%;
+  color: var(--dim);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+footer .site-credit a {
+  color: var(--muted);
 }
 
 .copy-toast {
