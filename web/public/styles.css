@@ -179,7 +179,7 @@ main {
   margin: 0;
   font-size: clamp(54px, 7.4vw, 116px);
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.14;
   letter-spacing: -0.065em;
   text-transform: uppercase;
 }

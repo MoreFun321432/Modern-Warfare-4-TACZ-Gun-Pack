@@ -1,6 +1,18 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.20",
+      "title": "继续增大首屏标题行距",
+      "publishedAt": "2026-10-25T14:18:04Z",
+      "summary": "进一步拉开“准备进入 / 火力覆盖区”两行主标题的上下间距。",
+      "changes": [
+        "首屏主标题行高从 1 调整为 1.14。",
+        "保持桌面端与移动端响应式字号不变。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.19",
       "title": "加大首屏标题行距",
       "publishedAt": "2026-10-25T14:15:31Z",
