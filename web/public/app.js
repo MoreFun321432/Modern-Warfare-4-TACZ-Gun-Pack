@@ -3,7 +3,7 @@ import {
   loadPackReleases,
   loadReleases,
   pickPackRelease
-} from "./release-data.js?v=20261025-6";
+} from "./release-data.js?v=20261025-7";
 import {
   createHomepageWebsiteUpdate,
   loadWebsiteUpdates
@@ -38,7 +38,7 @@ const repositoryConfig = {
 
 const repositoryUrl = `https://github.com/${repositoryConfig.owner}/${repositoryConfig.repo}`;
 const releasesUrl = `${repositoryUrl}/releases`;
-const acceleratedDownloadUrl = (url) => `https://github.akams.cn/?url=${encodeURIComponent(url)}`;
+const acceleratedDownloadUrl = (url) => `https://gh-proxy.com/${url}`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;

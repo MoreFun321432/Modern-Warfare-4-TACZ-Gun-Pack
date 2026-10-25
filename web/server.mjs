@@ -382,7 +382,7 @@ async function handleRequest(request, response) {
       || github.data?.repository?.url
       || `https://github.com/Skydeps1459/Modern-Warfare-4-TACZ-GunPack/releases/tag/v${gunpack.version}`;
     const accelerated = url.searchParams.get("accelerated") === "1"
-      ? `https://github.akams.cn/?url=${encodeURIComponent(location)}`
+      ? `https://gh-proxy.com/${location}`
       : location;
     redirect(response, accelerated);
     return;

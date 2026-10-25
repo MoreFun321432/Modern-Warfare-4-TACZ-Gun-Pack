@@ -11,6 +11,7 @@ import {
 } from "../server.mjs";
 import { toDetailPage, toStaticManifest } from "../scripts/build-static.mjs";
 import {
+  acceleratedReleaseUrl,
   extractReleaseSummary,
   isPackRelease,
   isWebsiteRelease,
@@ -82,8 +83,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 23);
-  assert.equal(updates[0].id, "website-v1.0.23");
+  assert.ok(updates.length >= 24);
+  assert.equal(updates[0].id, "website-v1.0.24");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -98,6 +99,13 @@ test("builds one canonical home-card detail path", () => {
   assert.equal(
     websiteUpdateDetailPath("website-v1.0.14"),
     "./website-updates/website-v1.0.14.html?v=20261025-11"
+  );
+});
+
+test("uses the verified gh-proxy accelerator", () => {
+  assert.equal(
+    acceleratedReleaseUrl("https://github.com/example/release.zip"),
+    "https://gh-proxy.com/https://github.com/example/release.zip"
   );
 });
 

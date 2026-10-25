@@ -47,7 +47,8 @@ Endpoints:
 - `GET /api/releases`: up to 30 GitHub Releases with notes and asset metadata.
 - `GET /api/website-updates`: repository-managed website update history.
 - `GET /api/download`: redirects to the latest release zip.
-- `GET /api/download?accelerated=1`: redirects through `github.akams.cn`.
+- `GET /api/download?accelerated=1`: redirects through the verified
+  `gh-proxy.com` accelerator.
 - `GET /api/icons/:id`: serves a gun icon from the pack.
 - `GET /healthz`: health check.
 

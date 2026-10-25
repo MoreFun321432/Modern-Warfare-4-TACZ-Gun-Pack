@@ -23,7 +23,7 @@ export function formatReleaseBytes(value) {
 }
 
 export function acceleratedReleaseUrl(url) {
-  return `https://github.akams.cn/?url=${encodeURIComponent(url)}`;
+  return `https://gh-proxy.com/${url}`;
 }
 
 export function releaseAnchor(tag) {
