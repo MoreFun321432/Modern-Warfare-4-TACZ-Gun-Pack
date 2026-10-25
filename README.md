@@ -1,5 +1,7 @@
 # Modern Warfare 4 — TACZ Gun Pack
 
+**简体中文** | [English](README.en.md)
+
 [![Website](https://img.shields.io/badge/website-repository--linked-c7f36b)](https://github.com/Skydeps1459/Modern-Warfare-4-TACZ-GunPack/tree/main/web)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-c7f36b)](./LICENSE)
 [![Gun pack: GPL--3.0](https://img.shields.io/badge/gun%20pack-GPL--3.0-orange)](./GUNPACK-LICENSE.md)
