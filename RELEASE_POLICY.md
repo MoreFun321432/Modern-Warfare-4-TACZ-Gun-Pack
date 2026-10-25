@@ -18,9 +18,10 @@ This policy applies to every update pushed to
 ## Release page bug list
 
 - Every published hotfix Release must include a `Bug 修复` section.
-- List each independent bug actually included in that build and its
-  player-visible result. When useful, add one short line describing the root
-  cause or the affected gun/system.
+- List each independent bug actually included in that build as one sentence:
+  which gun or system, what the player could see going wrong, and what the
+  result is after the fix. Do not describe root causes, internal channel names,
+  enum values, or timestamps, and do not end lines with punctuation.
 - Do not list unverified fixes, future work, or fixes that are not present in the
   attached zip.
 - Use [`RELEASE_NOTES_TEMPLATE.md`](./RELEASE_NOTES_TEMPLATE.md) as the required
