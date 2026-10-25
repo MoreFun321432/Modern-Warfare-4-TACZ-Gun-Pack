@@ -67,6 +67,7 @@ export async function buildStaticSite() {
   const staticManifest = toStaticManifest(manifest);
   await writeFile(join(distDir, "api", "gunpack.json"), `${JSON.stringify(staticManifest, null, 2)}\n`, "utf8");
   await writeFile(join(distDir, "api", "releases.json"), `${JSON.stringify(releases, null, 2)}\n`, "utf8");
+  await cp(join(webDir, "website-updates.json"), join(distDir, "api", "website-updates.json"));
 
   const iconNames = new Set(manifest.guns.map((gun) => `${gun.id}.png`));
   const sourceFiles = await readdir(iconSourceDir);

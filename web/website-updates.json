@@ -1,0 +1,52 @@
+{
+  "updates": [
+    {
+      "id": "website-v1.0.2",
+      "title": "网页更新改为仓库日志驱动",
+      "publishedAt": "2026-10-25T13:04:47Z",
+      "summary": "网页更新内容改由仓库内单一的 JSON 日志维护，并在本地后端与 GitHub Pages 上保持同步。",
+      "changes": [
+        "新增 web/website-updates.json 作为网页更新历史的数据源。",
+        "本地后端新增 /api/website-updates 接口。",
+        "GitHub Pages 构建时自动生成 api/website-updates.json 快照。",
+        "网页更新页按版本展示摘要、更新内容和问题修复。",
+        "后续每次网页可见改动都必须在同一提交中更新该日志。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
+      "id": "website-v1.0.1",
+      "title": "网页更新与枪包更新分离",
+      "publishedAt": "2026-10-25T13:01:52Z",
+      "summary": "网页自身的功能变化改用仓库内固定日志记录，并与枪包版本、bug 修复和下载记录分开维护。",
+      "changes": [
+        "新增独立“网页更新”页面，集中展示网页功能与界面变化。",
+        "首页最近更新和枪包更新日志只显示带 zip 附件的枪包 Release。",
+        "网页更新只保留 GitHub 发行说明入口，不再提供网站文件下载。",
+        "Release 发布或编辑后通过主分支自动重建 GitHub Pages。",
+        "更新记录按发布时间倒序展示。"
+      ],
+      "bugFixes": [
+        "修复网页版本混入枪包更新日志的问题。",
+        "修复网页版发行记录出现下载操作的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
+      "id": "website-v1.0.0",
+      "title": "最近更新与完整日志",
+      "publishedAt": "2026-10-25T12:53:20Z",
+      "summary": "建立网页版本记录，首页展示最近枪包更新，并提供完整日志页面。",
+      "changes": [
+        "首页新增“更新与日志”区域，默认展示最近 3 次 Release。",
+        "新增完整更新日志页，展示版本内容、附件信息和下载入口。",
+        "下载继续支持 github.akams.cn 测速加速，并保留 GitHub 原链。",
+        "网页版 Release 不替换枪包下载目标。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": "https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/releases/tag/website-v1.0.0"
+    }
+  ]
+}
+

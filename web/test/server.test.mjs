@@ -6,6 +6,7 @@ import {
   normalizeRelease,
   pickPackRelease,
   readGunPackManifest,
+  readWebsiteUpdates,
   sortReleasesByDate
 } from "../server.mjs";
 import { toStaticManifest } from "../scripts/build-static.mjs";
@@ -78,6 +79,14 @@ test("separates website releases from downloadable gun-pack releases", () => {
   assert.equal(isPackRelease(pack), true);
 });
 
+test("keeps a repository-driven website update log", async () => {
+  const updates = await readWebsiteUpdates();
+  assert.ok(updates.length >= 3);
+  assert.equal(updates[0].id, "website-v1.0.2");
+  assert.ok(Array.isArray(updates[0].changes));
+  assert.equal("downloadUrl" in updates[0], false);
+});
+
 test("serves health and local gun pack data", async (t) => {
   const server = createAppServer();
   server.listen(0, "127.0.0.1");
@@ -111,5 +120,10 @@ test("serves health and local gun pack data", async (t) => {
   const websiteUpdatesResponse = await fetch(`${baseUrl}/website-updates.html`);
   assert.equal(websiteUpdatesResponse.status, 200);
   assert.match(await websiteUpdatesResponse.text(), /网页更新/);
+
+  const websiteUpdateApiResponse = await fetch(`${baseUrl}/api/website-updates`);
+  assert.equal(websiteUpdateApiResponse.status, 200);
+  const websiteUpdateApi = await websiteUpdateApiResponse.json();
+  assert.ok(websiteUpdateApi.updates.length >= 2);
 });
 

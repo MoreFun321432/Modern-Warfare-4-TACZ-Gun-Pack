@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const serverDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(serverDir, "..");
 const publicDir = join(serverDir, "public");
+const websiteUpdatesPath = join(serverDir, "website-updates.json");
 const gunpackRoot = join(projectRoot, "assets", "mw4");
 const gunIndexRoot = join(projectRoot, "data", "mw4", "index", "guns");
 const gunIconRoot = join(projectRoot, "assets", "mw4", "textures", "gun", "slot");
@@ -163,6 +164,16 @@ export async function readGunPackManifest() {
     namespace: "mw4",
     guns: indexes
   };
+}
+
+export async function readWebsiteUpdates() {
+  const payload = await readJson(websiteUpdatesPath);
+  const updates = Array.isArray(payload.updates) ? payload.updates : [];
+  return updates.sort((left, right) => {
+    const leftTime = new Date(left.publishedAt || 0).getTime();
+    const rightTime = new Date(right.publishedAt || 0).getTime();
+    return rightTime - leftTime;
+  });
 }
 
 async function getGunPackManifest() {
@@ -380,6 +391,13 @@ async function handleRequest(request, response) {
       error: github.error,
       refreshedAt: new Date().toISOString()
     }, "public, max-age=60");
+    return;
+  }
+
+  if (url.pathname === "/api/website-updates") {
+    sendJson(response, 200, {
+      updates: await readWebsiteUpdates()
+    });
     return;
   }
 

@@ -58,7 +58,8 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 - 直接读取仓库内的 `gunpack_info.json`、枪械索引、语言文件和槽位图标。
 - 通过 GitHub API 同步仓库状态、Stars、最近发布日期和 Release 下载资源。
 - 首页展示最近 3 次枪包 Release；独立枪包日志同步完整版本内容与 bug 修复记录。
-- 网页自身功能更新单独记录，不进入枪包日志，也不提供网站文件下载。
+- 网页自身功能更新写入 `web/website-updates.json`，在独立“网页更新”页展示，
+  不进入枪包日志，也不提供网站文件下载。
 - 提供枪包清单 API、图标 API 和最新版本下载跳转。
 - 主下载按钮使用 `github.akams.cn` 加速，GitHub 原链保留为备用。
 - 包含响应式中文展示页、健康检查、自动化测试和 Dockerfile。

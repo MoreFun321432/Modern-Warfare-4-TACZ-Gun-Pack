@@ -45,10 +45,13 @@ This policy applies to every update pushed to
 
 ## Website updates
 
-- Website-only Releases use a `website-*` tag and are listed on the separate
-  `website-updates.html` page.
-- Website Releases must not appear in the gun-pack update cards or gun-pack
+- `web/website-updates.json` is the source of truth for website update history.
+- Every user-visible website change must add or update an entry in that file in
+  the same commit.
+- The repository-driven website history is shown on `website-updates.html`; a
+  separate GitHub Release is optional and requires explicit authorization.
+- Website updates must not appear in the gun-pack update cards or gun-pack
   changelog.
-- Website Releases have no download action. Their only external action is a link
-  to the GitHub Release notes.
+- Website update entries have no download action. An optional external action may
+  link to GitHub Release notes only.
 

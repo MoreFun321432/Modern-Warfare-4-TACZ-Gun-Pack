@@ -11,8 +11,11 @@ Node.js backend is not running. GitHub Pages also receives a generated
 `api/releases.json` snapshot for the home-page recent updates and the full
 `changelog.html` history.
 
-Website-only `website-*` Releases are isolated on `website-updates.html`.
-They never appear in the gun-pack changelog and have no download action.
+Website history is isolated on `website-updates.html` and never appears in the
+gun-pack changelog. Every visible website change must update
+`web/website-updates.json` in the same commit. The page reads this file through
+`GET /api/website-updates` locally and `api/website-updates.json` on Pages.
+Standalone `website-*` Releases are optional and never provide a download.
 
 The gun pack content follows TACZ's GPL-3.0 license. This website's source
 code and documentation are licensed separately under MIT.
@@ -36,6 +39,7 @@ Endpoints:
 - `GET /api/status`: gun pack, repository and latest release status.
 - `GET /api/gunpack`: local gun pack manifest.
 - `GET /api/releases`: up to 30 GitHub Releases with notes and asset metadata.
+- `GET /api/website-updates`: repository-managed website update history.
 - `GET /api/download`: redirects to the latest release zip.
 - `GET /api/download?accelerated=1`: redirects through `github.akams.cn`.
 - `GET /api/icons/:id`: serves a gun icon from the pack.

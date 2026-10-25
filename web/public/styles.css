@@ -741,6 +741,19 @@ main {
   background: rgba(255, 138, 61, 0.06);
 }
 
+.website-change-section + .website-change-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.website-change-section h3 {
+  margin-top: 0;
+  color: var(--orange);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+}
+
 .log-toolbar {
   display: flex;
   gap: 20px;
