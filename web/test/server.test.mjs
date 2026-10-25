@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { createAppServer, normalizeRelease, readGunPackManifest } from "../server.mjs";
+import { createAppServer, normalizeRelease, pickPackRelease, readGunPackManifest } from "../server.mjs";
 import { toStaticManifest } from "../scripts/build-static.mjs";
 import { extractReleaseSummary, normalizeRelease as normalizeClientRelease } from "../public/release-data.js";
 
@@ -42,6 +42,12 @@ test("keeps release notes and zip metadata in the release feed", () => {
   assert.equal(release.asset.size, 26229060);
   assert.equal(extractReleaseSummary(release.body), "修复换弹音效");
   assert.equal(normalizeClientRelease(release), release);
+});
+
+test("keeps downloads attached to the pack release when a site release is newer", () => {
+  const siteRelease = { tag: "website-v1.0.0", asset: null, prerelease: false };
+  const packRelease = { tag: "v1.8.0-Release", asset: { name: "pack.zip" }, prerelease: false };
+  assert.equal(pickPackRelease([siteRelease, packRelease]), packRelease);
 });
 
 test("serves health and local gun pack data", async (t) => {

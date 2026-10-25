@@ -194,6 +194,14 @@ export function normalizeRelease(release) {
   };
 }
 
+export function pickPackRelease(releases) {
+  return releases.find((release) => !release.prerelease && release.asset)
+    || releases.find((release) => release.asset)
+    || releases.find((release) => !release.prerelease)
+    || releases[0]
+    || null;
+}
+
 async function githubRequest(url, token) {
   const headers = {
     Accept: "application/vnd.github+json",
@@ -251,7 +259,7 @@ async function getGitHubData(force = false) {
   const releases = releasesResult.status === "fulfilled"
     ? releasesResult.value.filter((release) => !release.draft).map(normalizeRelease)
     : [];
-  const release = releases.find((item) => !item.prerelease) || releases[0] || null;
+  const release = pickPackRelease(releases);
   const errors = [repoResult, releasesResult]
     .filter((result) => result.status === "rejected")
     .map((result) => result.reason?.message || "GitHub request failed");

@@ -1,4 +1,4 @@
-import { createHomeReleaseCard, loadReleases } from "./release-data.js?v=20261025-1";
+import { createHomeReleaseCard, loadReleases, pickPackRelease } from "./release-data.js?v=20261025-2";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),
@@ -27,7 +27,7 @@ const repositoryConfig = {
 };
 
 const repositoryUrl = `https://github.com/${repositoryConfig.owner}/${repositoryConfig.repo}`;
-const latestReleaseUrl = `${repositoryUrl}/releases/latest`;
+const releasesUrl = `${repositoryUrl}/releases`;
 const acceleratedDownloadUrl = (url) => `https://github.akams.cn/?url=${encodeURIComponent(url)}`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
@@ -56,7 +56,7 @@ function applyRepositoryLinks(url) {
 }
 
 function applyDownloadLinks(url) {
-  const target = url || latestReleaseUrl;
+  const target = url || releasesUrl;
   elements.downloadAccelerated.href = acceleratedDownloadUrl(target);
   elements.downloadDirect.href = target;
 }
@@ -106,26 +106,6 @@ function renderGuns(guns) {
   const fragment = document.createDocumentFragment();
   guns.forEach((gun, index) => fragment.append(createGunCard(gun, index)));
   elements.grid.append(fragment);
-}
-
-function normalizeClientRelease(release) {
-  if (!release) return null;
-  const zipAsset = (release.assets || []).find((asset) => /\.zip$/i.test(asset.name));
-  return {
-    tag: release.tag_name,
-    name: release.name || release.tag_name,
-    url: release.html_url,
-    publishedAt: release.published_at,
-    downloadUrl: zipAsset?.browser_download_url || release.html_url,
-    asset: zipAsset
-      ? {
-          name: zipAsset.name,
-          size: zipAsset.size,
-          downloadCount: zipAsset.download_count,
-          updatedAt: zipAsset.updated_at
-        }
-      : null
-  };
 }
 
 function renderStatus(data) {
@@ -183,11 +163,12 @@ async function loadFromGitHubPages() {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28"
   };
-  const [gunpack, repositoryResult, releaseResult] = await Promise.all([
+  const [gunpack, repositoryResult, releases] = await Promise.all([
     fetchJson(new URL("api/gunpack.json", document.baseURI)),
     fetchJson(apiBase, { headers }),
-    fetchJson(`${apiBase}/releases/latest`, { headers }).catch(() => null)
+    loadReleases()
   ]);
+  const packRelease = pickPackRelease(releases);
 
   return {
     gunpack,
@@ -205,7 +186,7 @@ async function loadFromGitHubPages() {
         updatedAt: repositoryResult.updated_at,
         pushedAt: repositoryResult.pushed_at
       },
-      release: normalizeClientRelease(releaseResult)
+      release: packRelease
     },
     githubError: null,
     refreshedAt: new Date().toISOString()
@@ -259,6 +240,6 @@ async function loadRecentReleases() {
   }
 }
 
-applyDownloadLinks(latestReleaseUrl);
+applyDownloadLinks(releasesUrl);
 loadStatus();
 loadRecentReleases();

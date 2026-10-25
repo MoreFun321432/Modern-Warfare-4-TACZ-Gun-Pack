@@ -53,6 +53,14 @@ export function normalizeRelease(release) {
   };
 }
 
+export function pickPackRelease(releases) {
+  return releases.find((release) => !release.prerelease && release.asset)
+    || releases.find((release) => release.asset)
+    || releases.find((release) => !release.prerelease)
+    || releases[0]
+    || null;
+}
+
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
