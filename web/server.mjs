@@ -380,7 +380,7 @@ async function handleRequest(request, response) {
     const github = await getGitHubData();
     const location = github.data?.release?.downloadUrl
       || github.data?.repository?.url
-      || `https://github.com/MoreFun321432/MW4GunPack/releases/tag/v${gunpack.version}`;
+      || `https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-GunPack/releases/tag/v${gunpack.version}`;
     const accelerated = url.searchParams.get("accelerated") === "1"
       ? `https://github.akams.cn/?url=${encodeURIComponent(location)}`
       : location;

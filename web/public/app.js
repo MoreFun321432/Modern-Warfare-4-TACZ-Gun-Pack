@@ -33,7 +33,7 @@ const elements = {
 
 const repositoryConfig = {
   owner: "MoreFun321432",
-  repo: "MW4GunPack"
+  repo: "Modern-Warfare-4-TACZ-GunPack"
 };
 
 const repositoryUrl = `https://github.com/${repositoryConfig.owner}/${repositoryConfig.repo}`;

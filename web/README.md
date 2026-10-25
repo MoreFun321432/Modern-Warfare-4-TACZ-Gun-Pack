@@ -5,7 +5,7 @@ repository, then combines them with GitHub repository and release information.
 It has no third-party runtime dependencies.
 
 The public static build is published by GitHub Pages at:
-<https://morefun321432.github.io/MW4GunPack/>.
+<https://morefun321432.github.io/Modern-Warfare-4-TACZ-GunPack/>.
 It falls back to the GitHub API and a generated `api/gunpack.json` when the
 Node.js backend is not running. GitHub Pages also receives a generated
 `api/releases.json` snapshot for the home-page recent updates and the full

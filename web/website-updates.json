@@ -1,6 +1,19 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.16",
+      "title": "仓库名称改为 Modern Warfare 4 TACZ GunPack",
+      "publishedAt": "2026-10-25T13:58:47Z",
+      "summary": "GitHub 仓库改用 Modern Warfare 4 TACZ GunPack 的 URL 标识，Pages 恢复使用当前账号的前缀。",
+      "changes": [
+        "仓库 URL 标识改为 Modern-Warfare-4-TACZ-GunPack。",
+        "GitHub Pages 前缀恢复为当前账号 MoreFun321432。",
+        "网站配置、API、下载、Release 与文档链接同步更新。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.15",
       "title": "站点链接前缀改为 MW4GunPack",
       "publishedAt": "2026-10-25T13:54:55Z",
@@ -213,7 +226,7 @@
         "网页版 Release 不替换枪包下载目标。"
       ],
       "bugFixes": [],
-      "releaseUrl": "https://github.com/MoreFun321432/MW4GunPack/releases/tag/website-v1.0.0"
+      "releaseUrl": "https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-GunPack/releases/tag/website-v1.0.0"
     }
   ]
 }
