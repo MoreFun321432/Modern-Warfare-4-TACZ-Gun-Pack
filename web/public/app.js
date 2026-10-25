@@ -185,22 +185,24 @@ async function loadFromGitHubPages() {
   return {
     gunpack,
     github: {
-      repository: {
-        owner: repositoryResult.owner?.login,
-        name: repositoryResult.name,
-        fullName: repositoryResult.full_name,
-        url: repositoryResult.html_url,
-        description: repositoryResult.description,
-        defaultBranch: repositoryResult.default_branch,
-        stars: repositoryResult.stargazers_count,
-        forks: repositoryResult.forks_count,
-        openIssues: repositoryResult.open_issues_count,
-        updatedAt: repositoryResult.updated_at,
-        pushedAt: repositoryResult.pushed_at
-      },
+      repository: repositoryResult
+        ? {
+            owner: repositoryResult.owner?.login || repositoryResult.owner,
+            name: repositoryResult.name,
+            fullName: repositoryResult.full_name || repositoryResult.fullName,
+            url: repositoryResult.html_url || repositoryResult.url,
+            description: repositoryResult.description,
+            defaultBranch: repositoryResult.default_branch || repositoryResult.defaultBranch,
+            stars: repositoryResult.stargazers_count ?? repositoryResult.stars,
+            forks: repositoryResult.forks_count ?? repositoryResult.forks,
+            openIssues: repositoryResult.open_issues_count ?? repositoryResult.openIssues,
+            updatedAt: repositoryResult.updated_at || repositoryResult.updatedAt,
+            pushedAt: repositoryResult.pushed_at || repositoryResult.pushedAt
+          }
+        : null,
       release: packRelease
     },
-    githubError: null,
+    githubError: repositoryResult ? null : "GitHub repository status is unavailable.",
     refreshedAt: new Date().toISOString()
   };
 }

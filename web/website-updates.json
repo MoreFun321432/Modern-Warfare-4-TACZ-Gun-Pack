@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.8",
+      "title": "修复静态仓库快照字段映射",
+      "publishedAt": "2026-10-25T13:17:19Z",
+      "summary": "GitHub Pages 静态仓库快照改用前端字段映射，仓库名称、更新时间与 Stars 可正常展示。",
+      "changes": [
+        "兼容静态 repository.json 的 camelCase 字段。",
+        "保留 GitHub API 原始字段作为后备。",
+        "API 不可用时显示静态仓库状态，而非空白信息。"
+      ],
+      "bugFixes": [
+        "修复离线回退后仓库名称、更新时间和 Stars 为空或 NaN 的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.7",
       "title": "修复 GitHub API 限流导致网页显示离线",
       "publishedAt": "2026-10-25T13:15:16Z",
