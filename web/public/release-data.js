@@ -1,6 +1,6 @@
 const repositoryConfig = {
   owner: "MoreFun321432",
-  repo: "Modern-Warfare-4-TACZ-Gun-Pack"
+  repo: "MW4GunPack"
 };
 
 const dateFormatter = new Intl.DateTimeFormat("zh-CN", {

@@ -1,6 +1,6 @@
 # Modern Warfare 4 — TACZ Gun Pack
 
-[![Website](https://img.shields.io/badge/website-repository--linked-c7f36b)](https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/tree/main/web)
+[![Website](https://img.shields.io/badge/website-repository--linked-c7f36b)](https://github.com/MoreFun321432/MW4GunPack/tree/main/web)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-c7f36b)](./LICENSE)
 [![Gun pack: GPL--3.0](https://img.shields.io/badge/gun%20pack-GPL--3.0-orange)](./GUNPACK-LICENSE.md)
 
@@ -8,7 +8,7 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 `mw4`。当前版本为 **1.8.0-Release**，包含 14 把枪、弹药、配件、换弹状态机和
 仓库联动网页。
 
-在线网页：<https://morefun321432.github.io/Modern-Warfare-4-TACZ-Gun-Pack/>
+在线网页：<https://morefun321432.github.io/MW4GunPack/>
 
 下载按钮默认经过 `https://github.akams.cn` 测速加速，同时保留 GitHub Release
 原链。
@@ -43,7 +43,7 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 
 ## 安装
 
-1. 从 [Releases](https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/releases)
+1. 从 [Releases](https://github.com/MoreFun321432/MW4GunPack/releases)
    下载 `Modern Warfare 4-<version>.zip`。
 2. 把 zip 原样放进实例的 `.minecraft/tacz/` 目录，不要解压。
 3. 启动游戏，或执行 `/tacz reload`。更新已加载的枪包时先完全退出游戏。

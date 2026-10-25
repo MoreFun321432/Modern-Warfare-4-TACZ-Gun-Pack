@@ -12,7 +12,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const webDir = resolve(scriptDir, "..");
 const projectRoot = resolve(webDir, "..");
 const repositoryOwner = process.env.GITHUB_OWNER || "MoreFun321432";
-const repositoryName = process.env.GITHUB_REPO || "Modern-Warfare-4-TACZ-Gun-Pack";
+const repositoryName = process.env.GITHUB_REPO || "MW4GunPack";
 
 export async function fetchStaticReleases({
   owner = repositoryOwner,
