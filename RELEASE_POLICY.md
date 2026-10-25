@@ -15,6 +15,19 @@ This policy applies to every update pushed to
 - A change batch below the threshold stays local and is not uploaded to GitHub.
 - The repository owner may explicitly authorize an earlier or different release.
 
+## Release page bug list
+
+- Every published hotfix Release must include a `Bug 修复` section.
+- List each independent bug actually included in that build and its
+  player-visible result. When useful, add one short line describing the root
+  cause or the affected gun/system.
+- Do not list unverified fixes, future work, or fixes that are not present in the
+  attached zip.
+- Use [`RELEASE_NOTES_TEMPLATE.md`](./RELEASE_NOTES_TEMPLATE.md) as the required
+  release description template.
+- After uploading the replacement or new archive, read the Release page back and
+  confirm that its bug list and attached file version match.
+
 ## New guns
 
 - Adding a new gun does not grant permission to push or publish it.
