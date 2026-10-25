@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.18",
+      "title": "页面滚动时同步导航哈希",
+      "publishedAt": "2026-10-25T14:10:08Z",
+      "summary": "点击分区锚点后，滚动到其他区域或回到顶部时会同步更新或移除 URL 哈希。",
+      "changes": [
+        "滚回页面顶部时自动恢复为无哈希的基础地址。",
+        "滚动到军械库、最近更新、安装和网页更新区域时同步对应锚点。",
+        "使用 replaceState 更新地址，不会额外增加浏览器历史记录。"
+      ],
+      "bugFixes": [
+        "修复点击 #arsenal 后滚回顶部，URL 仍残留 #arsenal 的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.17",
       "title": "同步 GitHub 新用户名 Skydeps1459",
       "publishedAt": "2026-10-25T14:01:49Z",

@@ -42,6 +42,7 @@ const acceleratedDownloadUrl = (url) => `https://github.akams.cn/?url=${encodeUR
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
+const SCROLL_ANCHOR_IDS = ["arsenal", "updates", "install", "website-log"];
 const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
   year: "numeric",
   month: "2-digit",
@@ -306,3 +307,41 @@ document.addEventListener("visibilitychange", () => {
     refreshPublicData();
   }
 });
+
+let scrollFrame = 0;
+
+function replaceLocationHash(sectionId) {
+  const url = `${window.location.pathname}${window.location.search}${sectionId ? `#${sectionId}` : ""}`;
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== url) {
+    window.history.replaceState(null, "", url);
+  }
+}
+
+function syncLocationWithScroll() {
+  scrollFrame = 0;
+  if (window.scrollY <= 96) {
+    replaceLocationHash("");
+    return;
+  }
+
+  const probe = window.scrollY + Math.min(window.innerHeight * 0.42, 340);
+  let currentSection = "";
+  for (const sectionId of SCROLL_ANCHOR_IDS) {
+    const section = document.getElementById(sectionId);
+    if (section && section.offsetTop <= probe) currentSection = sectionId;
+  }
+
+  if (currentSection && window.location.hash !== `#${currentSection}`) {
+    replaceLocationHash(currentSection);
+  }
+}
+
+function scheduleScrollLocationSync() {
+  if (scrollFrame) return;
+  scrollFrame = window.requestAnimationFrame(syncLocationWithScroll);
+}
+
+window.addEventListener("scroll", scheduleScrollLocationSync, { passive: true });
+window.addEventListener("hashchange", scheduleScrollLocationSync);
+window.addEventListener("resize", scheduleScrollLocationSync);
+window.requestAnimationFrame(() => window.requestAnimationFrame(syncLocationWithScroll));
