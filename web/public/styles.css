@@ -999,6 +999,18 @@ footer a {
   text-underline-offset: 3px;
 }
 
+footer .admin-entry {
+  color: var(--dim);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  opacity: 0.58;
+}
+
+footer .admin-entry:hover {
+  color: var(--acid);
+  opacity: 1;
+}
+
 @media (max-width: 1050px) {
   .hero {
     grid-template-columns: 1fr;

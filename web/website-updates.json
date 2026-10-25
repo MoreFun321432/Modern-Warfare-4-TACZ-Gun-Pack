@@ -1,6 +1,19 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.28",
+      "title": "页脚新增低调网页管理入口",
+      "publishedAt": "2026-10-25T15:31:28Z",
+      "summary": "在页面底部加入不醒目的网页管理入口，当前跳转到 GitHub 的分流配置编辑页。",
+      "changes": [
+        "主页、枪包日志、网页更新和详情页页脚新增“网页管理”链接。",
+        "链接默认指向 web/domestic-mirror.json 的 GitHub 在线编辑页。",
+        "GitHub 权限仍然只允许拥有仓库写权限的账号保存。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.27",
       "title": "修复蓝奏云模块脚本缓存",
       "publishedAt": "2026-10-25T15:24:30Z",
