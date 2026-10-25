@@ -12,7 +12,11 @@ import {
   sortReleasesByDate,
   validateDomesticMirror
 } from "../server.mjs";
-import { toDetailPage, toStaticManifest } from "../scripts/build-static.mjs";
+import {
+  downloadConfigFromSelection,
+  toDetailPage,
+  toStaticManifest
+} from "../scripts/build-static.mjs";
 import {
   acceleratedReleaseUrl,
   extractReleaseSummary,
@@ -86,8 +90,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 29);
-  assert.equal(updates[0].id, "website-v1.0.29");
+  assert.ok(updates.length >= 30);
+  assert.equal(updates[0].id, "website-v1.0.30");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -117,6 +121,24 @@ test("supports the build-selected accelerator prefix", () => {
     acceleratedReleaseUrl("https://github.com/example/release.zip", "https://mirror.example/"),
     "https://mirror.example/https://github.com/example/release.zip"
   );
+});
+
+test("combines the daily mirror selection with the latest pack URL", () => {
+  const directUrl = "https://github.com/example/releases/download/v1.8.1/pack.zip";
+  const config = downloadConfigFromSelection(directUrl, {
+    generatedAt: "2026-10-25T16:00:00Z",
+    selected: {
+      id: "daily-node",
+      name: "daily.example",
+      prefix: "https://daily.example/",
+      latencyMs: 250
+    },
+    fallback: null,
+    excludedHosts: ["gh.my-website.ccwu.cc"],
+    probes: []
+  });
+  assert.equal(config.directUrl, directUrl);
+  assert.equal(config.acceleratedUrl, `https://daily.example/${directUrl}`);
 });
 
 test("excludes the known resetting mirror host", async () => {

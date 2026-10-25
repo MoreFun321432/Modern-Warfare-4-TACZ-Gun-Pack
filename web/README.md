@@ -57,11 +57,12 @@ Endpoints:
 - `GET /api/admin/session`: current admin session and mirror.
 - `POST /api/admin/domestic-mirror`: commit mirror changes to GitHub.
 
-The static build tests `web/download-mirrors.json`, rejects reset/timeout and
-unexpected HTML responses, and writes `api/download-config.json` with the
-fastest working mirror for the latest pack asset. Home-page and changelog
-download links read that generated config, so future releases are converted
-automatically.
+The daily `Daily Download Mirror` workflow tests `web/download-mirrors.json`,
+rejects reset/timeout and unexpected HTML responses, and commits the selected
+mirror to `web/download-selection.json`. Every Pages build combines that daily
+selection with the latest pack asset and writes `api/download-config.json`.
+Home-page and changelog download links read the generated config, so new
+releases are converted immediately without waiting for the next daily run.
 
 Run the tests with:
 

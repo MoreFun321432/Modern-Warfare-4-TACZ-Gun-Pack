@@ -13,9 +13,8 @@ website.
 
 Website: <https://skydeps1459.github.io/Modern-Warfare-4-TACZ-GunPack/>
 
-Download buttons test the configured accelerator candidates during each build,
-select the fastest stable mirror, and keep the original GitHub Release URL as a
-fallback.
+Download buttons use a daily speed-test result, select the fastest stable
+mirror, and keep the original GitHub Release URL as a fallback.
 
 > The Lite pack is frozen. This repository only maintains the main
 > `Modern Warfare 4` package. Website, API, and GitHub workflow files are

@@ -175,6 +175,32 @@ export async function buildDownloadConfig(downloadUrl, mirrors) {
   };
 }
 
+export function downloadConfigFromSelection(downloadUrl, selection) {
+  if (!downloadUrl) {
+    return {
+      generatedAt: new Date().toISOString(),
+      directUrl: null,
+      selected: DEFAULT_MIRROR,
+      fallback: null,
+      acceleratedUrl: null,
+      probes: []
+    };
+  }
+
+  const selected = selection?.selected?.prefix
+    ? selection.selected
+    : DEFAULT_MIRROR;
+  return {
+    generatedAt: selection?.generatedAt || new Date().toISOString(),
+    directUrl: downloadUrl,
+    selected,
+    fallback: selection?.fallback || null,
+    acceleratedUrl: `${selected.prefix}${downloadUrl}`,
+    excludedHosts: selection?.excludedHosts || ["gh.my-website.ccwu.cc"],
+    probes: selection?.probes || []
+  };
+}
+
 export async function buildStaticSite() {
   const publicDir = join(webDir, "public");
   const distDir = join(webDir, "dist");
@@ -192,18 +218,20 @@ export async function buildStaticSite() {
     }
   }
 
-  const [manifest, releases, repository, mirrorConfig] = await Promise.all([
+  const [manifest, releases, repository, downloadedSelection] = await Promise.all([
     readGunPackManifest(),
     fetchStaticReleases(),
     fetchStaticRepository(),
-    readFile(join(webDir, "download-mirrors.json"), "utf8").then(JSON.parse)
+    readFile(join(webDir, "download-selection.json"), "utf8")
+      .then(JSON.parse)
+      .catch(() => null)
   ]);
   const packRelease = releases.find((release) =>
     release.asset && !/^website-/i.test(release.tag)
   );
-  const downloadConfig = await buildDownloadConfig(
+  const downloadConfig = downloadConfigFromSelection(
     packRelease?.downloadUrl || null,
-    mirrorConfig.mirrors || []
+    downloadedSelection
   );
   const staticManifest = toStaticManifest(manifest);
   await writeFile(join(distDir, "api", "gunpack.json"), `${JSON.stringify(staticManifest, null, 2)}\n`, "utf8");

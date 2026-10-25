@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.30",
+      "title": "下载节点改为每天自动测速",
+      "publishedAt": "2026-10-25T16:15:29Z",
+      "summary": "新增每日测速任务，提交最快稳定节点，并由 Pages 自动生成主下载链接。",
+      "changes": [
+        "新增 web/scripts/refresh-download-mirror.mjs 每日测速脚本。",
+        "新增 Daily Download Mirror GitHub Actions 工作流，每天运行一次。",
+        "测速结果保存到 web/download-selection.json。",
+        "Pages 构建读取每日选择，并与最新枪包 Release 自动拼接下载地址。",
+        "测速全部失败时保留上一次可用节点，不覆盖现有链接。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.29",
       "title": "蓝奏云分流自动复制密码",
       "publishedAt": "2026-10-25T15:34:51Z",
