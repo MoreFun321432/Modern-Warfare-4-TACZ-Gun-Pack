@@ -6,7 +6,7 @@
     <meta name="description" content="Modern Warfare 4 TACZ 枪包下载、版本与仓库信息。">
     <meta name="theme-color" content="#0a0c0b">
     <title>Modern Warfare 4 // TACZ Gun Pack</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
     <div class="noise" aria-hidden="true"></div>
@@ -35,12 +35,12 @@
             从仓库获取最新版本，放进 <code>tacz</code> 目录即可部署。
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="/api/download">
-              <span>下载最新枪包</span>
+            <a class="button button-primary" id="download-accelerated" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/releases/latest" rel="noreferrer">
+              <span>加速下载枪包</span>
               <span class="button-arrow">↓</span>
             </a>
-            <a class="button button-ghost" id="repo-hero-link" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack" rel="noreferrer">
-              查看源码
+            <a class="button button-ghost" id="download-direct" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/releases/latest" rel="noreferrer">
+              GitHub 原链
             </a>
           </div>
           <dl class="hero-stats">
@@ -75,7 +75,7 @@
           <div class="manifest-list">
             <div><span>PACKAGE</span><strong id="manifest-version">MW4</strong></div>
             <div><span>RELEASE</span><strong id="release-date">CHECKING</strong></div>
-            <div><span>LICENSE</span><strong>MIT</strong></div>
+            <div><span>PACK LICENSE</span><strong id="manifest-license">GPL-3.0</strong></div>
             <div><span>NAMESPACE</span><strong>mw4</strong></div>
           </div>
         </aside>
@@ -87,12 +87,12 @@
           <span>5 AMMO CALIBERS</span>
           <span>FORGE 1.20.1</span>
           <span>TACZ 1.1.8</span>
-          <span>MIT LICENSED</span>
+          <span>GPL-3.0 PACK / MIT SITE</span>
           <span aria-hidden="true">14 WEAPON PLATFORMS</span>
           <span aria-hidden="true">5 AMMO CALIBERS</span>
           <span aria-hidden="true">FORGE 1.20.1</span>
           <span aria-hidden="true">TACZ 1.1.8</span>
-          <span aria-hidden="true">MIT LICENSED</span>
+          <span aria-hidden="true">GPL-3.0 PACK / MIT SITE</span>
         </div>
       </section>
 
@@ -159,10 +159,10 @@
 
     <footer>
       <span>MODERN WARFARE 4 // TACZ</span>
-      <span>代码与文档以 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/LICENSE" rel="noreferrer">MIT License</a> 发布</span>
+      <span>枪包 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/GUNPACK-LICENSE.md" rel="noreferrer">GPL-3.0</a> · 网站代码与文档 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/LICENSE" rel="noreferrer">MIT</a></span>
     </footer>
 
-    <script src="/app.js" type="module"></script>
+    <script src="./app.js" type="module"></script>
   </body>
 </html>
 

@@ -3,18 +3,29 @@ const elements = {
   gunCount: document.querySelector("#gun-count"),
   repoStars: document.querySelector("#repo-stars"),
   manifestVersion: document.querySelector("#manifest-version"),
+  manifestLicense: document.querySelector("#manifest-license"),
   releaseDate: document.querySelector("#release-date"),
   grid: document.querySelector("#gun-grid"),
   repositoryDescription: document.querySelector("#repository-description"),
   repoName: document.querySelector("#repo-name"),
   repoUpdated: document.querySelector("#repo-updated"),
   assetSize: document.querySelector("#asset-size"),
+  downloadAccelerated: document.querySelector("#download-accelerated"),
+  downloadDirect: document.querySelector("#download-direct"),
   repoLinks: [
     document.querySelector("#repo-nav-link"),
-    document.querySelector("#repo-hero-link"),
     document.querySelector("#repo-panel-link")
   ].filter(Boolean)
 };
+
+const repositoryConfig = {
+  owner: "MoreFun321432",
+  repo: "Modern-Warfare-4-TACZ-Gun-Pack"
+};
+
+const repositoryUrl = `https://github.com/${repositoryConfig.owner}/${repositoryConfig.repo}`;
+const latestReleaseUrl = `${repositoryUrl}/releases/latest`;
+const acceleratedDownloadUrl = (url) => `https://github.akams.cn/?url=${encodeURIComponent(url)}`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
 const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
@@ -39,6 +50,12 @@ function formatBytes(value) {
 function applyRepositoryLinks(url) {
   if (!url) return;
   for (const link of elements.repoLinks) link.href = url;
+}
+
+function applyDownloadLinks(url) {
+  const target = url || latestReleaseUrl;
+  elements.downloadAccelerated.href = acceleratedDownloadUrl(target);
+  elements.downloadDirect.href = target;
 }
 
 function createGunCard(gun, index) {
@@ -88,15 +105,37 @@ function renderGuns(guns) {
   elements.grid.append(fragment);
 }
 
+function normalizeClientRelease(release) {
+  if (!release) return null;
+  const zipAsset = (release.assets || []).find((asset) => /\.zip$/i.test(asset.name));
+  return {
+    tag: release.tag_name,
+    name: release.name || release.tag_name,
+    url: release.html_url,
+    publishedAt: release.published_at,
+    downloadUrl: zipAsset?.browser_download_url || release.html_url,
+    asset: zipAsset
+      ? {
+          name: zipAsset.name,
+          size: zipAsset.size,
+          downloadCount: zipAsset.download_count,
+          updatedAt: zipAsset.updated_at
+        }
+      : null
+  };
+}
+
 function renderStatus(data) {
   const { gunpack, github, githubError } = data;
   elements.packVersion.textContent = gunpack.version;
   elements.gunCount.textContent = numberFormatter.format(gunpack.guns.length);
   elements.manifestVersion.textContent = `MW4 / ${gunpack.version.replace("-Release", "")}`;
+  elements.manifestLicense.textContent = gunpack.license;
   renderGuns(gunpack.guns);
 
   const repository = github?.repository;
   const release = github?.release;
+  applyDownloadLinks(release?.downloadUrl);
   if (repository) {
     elements.repoName.textContent = repository.fullName;
     elements.repoStars.textContent = numberFormatter.format(repository.stars);
@@ -123,11 +162,62 @@ function renderStatus(data) {
   }
 }
 
+async function fetchJson(url, options = {}) {
+  const response = await fetch(url, options);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+async function loadFromLocalBackend() {
+  return fetchJson(new URL("api/status", document.baseURI), {
+    headers: { Accept: "application/json" }
+  });
+}
+
+async function loadFromGitHubPages() {
+  const apiBase = `https://api.github.com/repos/${repositoryConfig.owner}/${repositoryConfig.repo}`;
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+  const [gunpack, repositoryResult, releaseResult] = await Promise.all([
+    fetchJson(new URL("api/gunpack.json", document.baseURI)),
+    fetchJson(apiBase, { headers }),
+    fetchJson(`${apiBase}/releases/latest`, { headers }).catch(() => null)
+  ]);
+
+  return {
+    gunpack,
+    github: {
+      repository: {
+        owner: repositoryResult.owner?.login,
+        name: repositoryResult.name,
+        fullName: repositoryResult.full_name,
+        url: repositoryResult.html_url,
+        description: repositoryResult.description,
+        defaultBranch: repositoryResult.default_branch,
+        stars: repositoryResult.stargazers_count,
+        forks: repositoryResult.forks_count,
+        openIssues: repositoryResult.open_issues_count,
+        updatedAt: repositoryResult.updated_at,
+        pushedAt: repositoryResult.pushed_at
+      },
+      release: normalizeClientRelease(releaseResult)
+    },
+    githubError: null,
+    refreshedAt: new Date().toISOString()
+  };
+}
+
 async function loadStatus() {
   try {
-    const response = await fetch("/api/status", { headers: { Accept: "application/json" } });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    renderStatus(await response.json());
+    let data;
+    try {
+      data = await loadFromLocalBackend();
+    } catch {
+      data = await loadFromGitHubPages();
+    }
+    renderStatus(data);
   } catch (error) {
     console.error(error);
     elements.grid.replaceChildren();
@@ -141,5 +231,5 @@ async function loadStatus() {
   }
 }
 
+applyDownloadLinks(latestReleaseUrl);
 loadStatus();
-

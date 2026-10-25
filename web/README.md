@@ -4,6 +4,14 @@ This Node.js service reads the gun pack metadata and icons directly from the
 repository, then combines them with GitHub repository and release information.
 It has no third-party runtime dependencies.
 
+The public static build is published by GitHub Pages at:
+<https://morefun321432.github.io/Modern-Warfare-4-TACZ-Gun-Pack/>.
+It falls back to the GitHub API and a generated `api/gunpack.json` when the
+Node.js backend is not running.
+
+The gun pack content follows TACZ's GPL-3.0 license. This website's source
+code and documentation are licensed separately under MIT.
+
 Run locally from the repository root:
 
 ```powershell
@@ -23,6 +31,7 @@ Endpoints:
 - `GET /api/status`: gun pack, repository and latest release status.
 - `GET /api/gunpack`: local gun pack manifest.
 - `GET /api/download`: redirects to the latest release zip.
+- `GET /api/download?accelerated=1`: redirects through `github.akams.cn`.
 - `GET /api/icons/:id`: serves a gun icon from the pack.
 - `GET /healthz`: health check.
 
@@ -36,5 +45,11 @@ Build the container from the repository root:
 
 ```powershell
 docker build -f web/Dockerfile -t mw4-gunpack-site .
+```
+
+Build the GitHub Pages artifact:
+
+```powershell
+node web/scripts/build-static.mjs
 ```
 

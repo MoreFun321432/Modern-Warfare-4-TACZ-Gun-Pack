@@ -1,11 +1,17 @@
 # Modern Warfare 4 — TACZ Gun Pack
 
 [![Website](https://img.shields.io/badge/website-repository--linked-c7f36b)](https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/tree/main/web)
-[![License: MIT](https://img.shields.io/badge/license-MIT-c7f36b)](./LICENSE)
+[![Code: MIT](https://img.shields.io/badge/code-MIT-c7f36b)](./LICENSE)
+[![Gun pack: GPL--3.0](https://img.shields.io/badge/gun%20pack-GPL--3.0-orange)](./GUNPACK-LICENSE.md)
 
 Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空间为
 `mw4`。当前版本为 **1.8.0-Release**，包含 14 把枪、弹药、配件、换弹状态机和
 仓库联动网页。
+
+在线网页：<https://morefun321432.github.io/Modern-Warfare-4-TACZ-Gun-Pack/>
+
+下载按钮默认经过 `https://github.akams.cn` 测速加速，同时保留 GitHub Release
+原链。
 
 > Lite 包已冻结，本仓库只维护主包 `Modern Warfare 4`。仓库中的网页、API 和
 > GitHub 工作流不会被打进 TACZ 枪包 zip。
@@ -34,11 +40,13 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 
 ## 仓库联动网页
 
-`web/` 内是一个零运行时依赖的 Node.js 后端：
+`web/` 内是一个零运行时依赖的 Node.js 后端，并会自动发布 GitHub Pages
+静态版本：
 
 - 直接读取仓库内的 `gunpack_info.json`、枪械索引、语言文件和槽位图标。
 - 通过 GitHub API 同步仓库状态、Stars、最近发布日期和 Release 下载资源。
 - 提供枪包清单 API、图标 API 和最新版本下载跳转。
+- 主下载按钮使用 `github.akams.cn` 加速，GitHub 原链保留为备用。
 - 包含响应式中文展示页、健康检查、自动化测试和 Dockerfile。
 
 从仓库根目录启动：
@@ -77,6 +85,12 @@ python tools\repack_main.py
 
 ## License
 
-仓库中的代码与文档使用 [MIT License](./LICENSE)。第三方游戏名称、模型、贴图、
-音效及其他素材的权利仍归各自权利人所有。
+授权按内容类型区分：
+
+- 枪包模型、动画、贴图、音效及 `assets/mw4/`、`data/mw4/` 下的枪包内容遵循
+  TACZ 官方使用 **GPL-3.0**，见
+  [`GUNPACK-LICENSE.md`](./GUNPACK-LICENSE.md) 与
+  [`GUNPACK-LICENSE.txt`](./GUNPACK-LICENSE.txt)。
+- 网站源码、构建脚本和文档使用 [MIT License](./LICENSE)。
+- 第三方游戏名称、原始模型、贴图和音效的权利仍归各自权利人所有。
 

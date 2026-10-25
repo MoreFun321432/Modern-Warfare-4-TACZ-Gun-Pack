@@ -141,7 +141,7 @@ export async function readGunPackManifest() {
           type: data.type || "rifle",
           typeLabel: gunTypeLabels[data.type] || data.type || "枪械",
           sort: Number(data.sort ?? 999),
-          iconUrl: `/api/icons/${encodeURIComponent(id)}`
+          iconUrl: `api/icons/${encodeURIComponent(id)}`
         };
       })
   );
@@ -342,7 +342,10 @@ async function handleRequest(request, response) {
     const location = github.data?.release?.downloadUrl
       || github.data?.repository?.url
       || `https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/releases/tag/v${gunpack.version}`;
-    redirect(response, location);
+    const accelerated = url.searchParams.get("accelerated") === "1"
+      ? `https://github.akams.cn/?url=${encodeURIComponent(location)}`
+      : location;
+    redirect(response, accelerated);
     return;
   }
 

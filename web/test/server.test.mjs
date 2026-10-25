@@ -2,14 +2,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { createAppServer, readGunPackManifest } from "../server.mjs";
+import { toStaticManifest } from "../scripts/build-static.mjs";
 
 test("reads the live gun pack manifest", async () => {
   const manifest = await readGunPackManifest();
   assert.equal(manifest.namespace, "mw4");
   assert.match(manifest.version, /-Release$/);
-  assert.equal(manifest.license, "MIT");
+  assert.equal(manifest.license, "GPL-3.0");
   assert.ok(manifest.guns.length >= 14);
   assert.ok(manifest.guns.every((gun) => gun.id && gun.name && gun.iconUrl));
+});
+
+test("creates file-based icon URLs for static hosting", async () => {
+  const manifest = await readGunPackManifest();
+  const staticManifest = toStaticManifest(manifest);
+  assert.ok(staticManifest.guns.every((gun) => gun.iconUrl.endsWith(".png")));
+  assert.equal(manifest.guns[0].iconUrl.includes(".png"), false);
 });
 
 test("serves health and local gun pack data", async (t) => {
