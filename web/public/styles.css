@@ -187,6 +187,8 @@ main {
 .hero h1 span {
   color: transparent;
   -webkit-text-stroke: 1px rgba(238, 242, 231, 0.58);
+  paint-order: stroke fill;
+  text-rendering: geometricPrecision;
 }
 
 .hero-text {
@@ -1042,6 +1044,11 @@ footer a {
 
   .hero h1 {
     font-size: clamp(50px, 17vw, 82px);
+  }
+
+  .hero h1 span {
+    -webkit-text-stroke-width: 0.65px;
+    letter-spacing: 0.01em;
   }
 
   .hero-stats {
