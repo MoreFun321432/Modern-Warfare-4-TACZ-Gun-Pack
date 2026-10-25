@@ -774,6 +774,41 @@ main {
   padding: 0 clamp(22px, 5vw, 72px) clamp(90px, 10vw, 150px);
 }
 
+.site-breadcrumb {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 34px clamp(22px, 5vw, 72px) 0;
+  color: var(--dim);
+  font: 11px "Cascadia Code", Consolas, monospace;
+}
+
+.site-breadcrumb a {
+  color: var(--orange);
+}
+
+.website-detail-shell {
+  padding: clamp(48px, 7vw, 92px) clamp(22px, 5vw, 72px) clamp(90px, 10vw, 150px);
+}
+
+.website-detail-card {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.website-detail-card h1 {
+  margin: 18px 0 10px;
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.website-detail-summary {
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
 .release-entry {
   scroll-margin-top: 100px;
   border: 1px solid var(--line);

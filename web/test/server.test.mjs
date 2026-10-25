@@ -81,8 +81,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 11);
-  assert.equal(updates[0].id, "website-v1.0.11");
+  assert.ok(updates.length >= 12);
+  assert.equal(updates[0].id, "website-v1.0.12");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -123,6 +123,10 @@ test("serves health and local gun pack data", async (t) => {
   const websiteUpdatesResponse = await fetch(`${baseUrl}/website-updates.html`);
   assert.equal(websiteUpdatesResponse.status, 200);
   assert.match(await websiteUpdatesResponse.text(), /网页更新/);
+
+  const websiteUpdateDetailResponse = await fetch(`${baseUrl}/website-update.html`);
+  assert.equal(websiteUpdateDetailResponse.status, 200);
+  assert.match(await websiteUpdateDetailResponse.text(), /网页更新详情/);
 
   const websiteUpdateApiResponse = await fetch(`${baseUrl}/api/website-updates`);
   assert.equal(websiteUpdateApiResponse.status, 200);

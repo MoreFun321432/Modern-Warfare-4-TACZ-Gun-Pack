@@ -7,7 +7,7 @@ import {
 import {
   createHomepageWebsiteUpdate,
   loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-3";
+} from "./website-update-data.js?v=20261025-4";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),

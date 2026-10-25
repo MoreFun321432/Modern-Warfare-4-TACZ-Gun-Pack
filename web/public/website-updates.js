@@ -1,27 +1,11 @@
 import {
   formatWebsiteUpdateDate,
   loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-3";
+} from "./website-update-data.js?v=20261025-4";
 
 const list = document.querySelector("#website-update-list");
 const count = document.querySelector("#website-release-count");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
-
-function createChangeSection(title, items) {
-  if (!Array.isArray(items) || items.length === 0) return null;
-  const section = document.createElement("section");
-  section.className = "website-change-section";
-  const heading = document.createElement("h3");
-  heading.textContent = title;
-  const changes = document.createElement("ul");
-  for (const item of items) {
-    const entry = document.createElement("li");
-    entry.textContent = item;
-    changes.append(entry);
-  }
-  section.append(heading, changes);
-  return section;
-}
 
 function createWebsiteUpdateEntry(update) {
   const article = document.createElement("article");
@@ -43,6 +27,11 @@ function createWebsiteUpdateEntry(update) {
 
   const actions = document.createElement("div");
   actions.className = "release-actions";
+  const detailLink = document.createElement("a");
+  detailLink.className = "button button-primary";
+  detailLink.href = `./website-update.html?v=20261025-9&id=${encodeURIComponent(update.id)}`;
+  detailLink.textContent = "查看完整更新日志";
+  actions.append(detailLink);
   if (update.releaseUrl) {
     const releaseLink = document.createElement("a");
     releaseLink.className = "button button-ghost";
@@ -55,18 +44,13 @@ function createWebsiteUpdateEntry(update) {
 
   const facts = document.createElement("div");
   facts.className = "release-facts";
-  facts.textContent = "网页版本记录 · 不提供网站文件下载";
+  facts.textContent = `更新 ${update.changes?.length || 0} 项 · 修复 ${update.bugFixes?.length || 0} 项 · 不提供网站文件下载`;
 
   const notes = document.createElement("div");
   notes.className = "release-notes website-release-notes";
   const summary = document.createElement("p");
   summary.textContent = update.summary || "查看本次网页版本包含的完整变更。";
   notes.append(summary);
-
-  const changes = createChangeSection("更新内容", update.changes);
-  if (changes) notes.append(changes);
-  const bugFixes = createChangeSection("问题修复", update.bugFixes);
-  if (bugFixes) notes.append(bugFixes);
 
   article.append(header, facts, notes);
   return article;

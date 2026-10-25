@@ -16,6 +16,8 @@ gun-pack changelog. Every visible website change must update
 `web/website-updates.json` in the same commit. The page reads this file through
 `GET /api/website-updates` locally and `api/website-updates.json` on Pages.
 Standalone `website-*` Releases are optional and never provide a download.
+The list page shows summaries only; `website-update.html?id=<update-id>` is the
+third-level detail page with the complete change and fix lists.
 The Pages workflow rebuilds every five minutes, and open pages refresh their
 data on the same interval.
 

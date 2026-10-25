@@ -28,10 +28,12 @@ const staticFiles = new Map([
   ["/index.html", { file: "index.html", type: "text/html; charset=utf-8" }],
   ["/changelog.html", { file: "changelog.html", type: "text/html; charset=utf-8" }],
   ["/website-updates.html", { file: "website-updates.html", type: "text/html; charset=utf-8" }],
+  ["/website-update.html", { file: "website-update.html", type: "text/html; charset=utf-8" }],
   ["/styles.css", { file: "styles.css", type: "text/css; charset=utf-8" }],
   ["/app.js", { file: "app.js", type: "text/javascript; charset=utf-8" }],
   ["/changelog.js", { file: "changelog.js", type: "text/javascript; charset=utf-8" }],
   ["/website-updates.js", { file: "website-updates.js", type: "text/javascript; charset=utf-8" }],
+  ["/website-update.js", { file: "website-update.js", type: "text/javascript; charset=utf-8" }],
   ["/website-update-data.js", { file: "website-update-data.js", type: "text/javascript; charset=utf-8" }],
   ["/release-data.js", { file: "release-data.js", type: "text/javascript; charset=utf-8" }]
 ]);
