@@ -1,6 +1,19 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.5",
+      "title": "版本状态卡片改为当前版本概览",
+      "publishedAt": "2026-10-25T13:11:02Z",
+      "summary": "将首屏右侧容易误解的部署清单文案改成更直白的当前版本概览。",
+      "changes": [
+        "将 DEPLOYMENT MANIFEST 改为“当前版本概览”。",
+        "将状态文字 LIVE 改为“已同步”。",
+        "同步更新无障碍标签与网页更新记录。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.4",
       "title": "主页底部加入网页更新记录",
       "publishedAt": "2026-10-25T13:06:02Z",
