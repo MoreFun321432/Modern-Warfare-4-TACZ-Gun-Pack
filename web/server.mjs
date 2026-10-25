@@ -3,11 +3,14 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 
 const serverDir = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(serverDir, "..");
 const publicDir = join(serverDir, "public");
 const websiteUpdatesPath = join(serverDir, "website-updates.json");
+const domesticMirrorPath = join(serverDir, "domestic-mirror.json");
+const adminDir = join(serverDir, "admin");
 const gunpackRoot = join(projectRoot, "assets", "mw4");
 const gunIndexRoot = join(projectRoot, "data", "mw4", "index", "guns");
 const gunIconRoot = join(projectRoot, "assets", "mw4", "textures", "gun", "slot");
@@ -22,6 +25,19 @@ const cache = {
 
 const GUNPACK_CACHE_MS = 30_000;
 const GITHUB_CACHE_MS = 5 * 60_000;
+const ADMIN_SESSION_TTL_MS = 8 * 60 * 60_000;
+const ADMIN_GITHUB_ID = Number(process.env.ADMIN_GITHUB_ID || 317516594);
+const ADMIN_GITHUB_LOGIN = process.env.ADMIN_GITHUB_LOGIN || "Skydeps1459";
+const ADMIN_REPOSITORY_OWNER = process.env.GITHUB_OWNER || "Skydeps1459";
+const ADMIN_REPOSITORY_NAME = process.env.GITHUB_REPO || "Modern-Warfare-4-TACZ-GunPack";
+const ALLOWED_MIRROR_HOSTS = (process.env.ALLOWED_MIRROR_HOSTS
+  || "lanzouc.com,lanzoux.com,lanzoui.com,lanzou.com")
+  .split(",")
+  .map((host) => host.trim().toLowerCase())
+  .filter(Boolean);
+
+const adminSessions = new Map();
+const oauthStates = new Map();
 
 const staticFiles = new Map([
   ["/", { file: "index.html", type: "text/html; charset=utf-8" }],
@@ -125,6 +141,107 @@ async function readConfig() {
   } catch {
     return {};
   }
+}
+
+export function isAuthorizedGitHubUser(user, adminId = ADMIN_GITHUB_ID) {
+  return Number(user?.id) === Number(adminId);
+}
+
+export function validateDomesticMirror(input, allowedHosts = ALLOWED_MIRROR_HOSTS) {
+  const label = String(input?.label || "蓝奏云国内分流").trim();
+  const password = String(input?.password || "").trim();
+  if (!label || label.length > 60) {
+    throw new Error("分流名称必须为 1-60 个字符。");
+  }
+  if (password.length > 32) {
+    throw new Error("分享密码不能超过 32 个字符。");
+  }
+
+  let url;
+  try {
+    url = new URL(String(input?.url || "").trim());
+  } catch {
+    throw new Error("请输入有效的蓝奏云链接。");
+  }
+  if (!["http:", "https:"].includes(url.protocol)) {
+    throw new Error("分流链接必须使用 HTTP 或 HTTPS。");
+  }
+  const host = url.hostname.toLowerCase();
+  if (!allowedHosts.some((allowed) => host === allowed || host.endsWith(`.${allowed}`))) {
+    throw new Error("链接域名不在允许的蓝奏云列表中。");
+  }
+
+  return { label, url: url.href, password };
+}
+
+function parseCookies(request) {
+  const result = {};
+  for (const part of String(request.headers.cookie || "").split(";")) {
+    const separator = part.indexOf("=");
+    if (separator < 0) continue;
+    const name = part.slice(0, separator).trim();
+    result[name] = decodeURIComponent(part.slice(separator + 1).trim());
+  }
+  return result;
+}
+
+function isSecureRequest(request) {
+  const forwarded = String(request.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+  return forwarded === "https" || request.socket.encrypted === true;
+}
+
+function appendSetCookie(response, cookie) {
+  const existing = response.getHeader("Set-Cookie");
+  if (!existing) response.setHeader("Set-Cookie", cookie);
+  else response.setHeader("Set-Cookie", Array.isArray(existing) ? [...existing, cookie] : [existing, cookie]);
+}
+
+function sessionCookie(request, value, maxAgeSeconds) {
+  const secure = isSecureRequest(request) ? "; Secure" : "";
+  return `mw4_admin_session=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds}${secure}`;
+}
+
+function currentAdminSession(request) {
+  const sessionId = parseCookies(request).mw4_admin_session;
+  if (!sessionId) return null;
+  const session = adminSessions.get(sessionId);
+  if (!session) return null;
+  if (session.expiresAt <= Date.now()) {
+    adminSessions.delete(sessionId);
+    return null;
+  }
+  return { sessionId, ...session };
+}
+
+function safeEqual(left, right) {
+  const a = Buffer.from(String(left));
+  const b = Buffer.from(String(right));
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+function oauthConfigured() {
+  return Boolean(process.env.GITHUB_OAUTH_CLIENT_ID && process.env.GITHUB_OAUTH_CLIENT_SECRET);
+}
+
+function publicBaseUrl(request) {
+  if (process.env.PUBLIC_BASE_URL) return process.env.PUBLIC_BASE_URL.replace(/\/$/, "");
+  const protocol = isSecureRequest(request) ? "https" : "http";
+  return `${protocol}://${request.headers.host || "localhost"}`;
+}
+
+function oauthCallbackUrl(request) {
+  return `${publicBaseUrl(request)}/auth/github/callback`;
+}
+
+async function readRequestBody(request, limit = 16_384) {
+  const chunks = [];
+  let length = 0;
+  for await (const chunk of request) {
+    length += chunk.length;
+    if (length > limit) throw new Error("Request body too large");
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks).toString("utf8");
 }
 
 function plainText(value) {
@@ -319,12 +436,12 @@ function applySecurityHeaders(response) {
   );
 }
 
-async function serveFile(response, file, type, method) {
+async function serveFile(response, file, type, method, cacheControl = "public, max-age=300") {
   const fileStat = await stat(file);
   response.writeHead(200, {
     "Content-Type": type,
     "Content-Length": fileStat.size,
-    "Cache-Control": "public, max-age=300"
+    "Cache-Control": cacheControl
   });
   if (method === "HEAD") {
     response.end();
@@ -341,19 +458,226 @@ function redirect(response, location) {
   response.end();
 }
 
+async function exchangeOAuthCode(code, request) {
+  const response = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "User-Agent": "mw4-gunpack-admin"
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_OAUTH_CLIENT_ID,
+      client_secret: process.env.GITHUB_OAUTH_CLIENT_SECRET,
+      code,
+      redirect_uri: oauthCallbackUrl(request)
+    }),
+    signal: AbortSignal.timeout(10_000)
+  });
+  const payload = await response.json();
+  if (!response.ok || !payload.access_token) {
+    throw new Error(payload.error_description || payload.error || "GitHub OAuth exchange failed.");
+  }
+  return payload.access_token;
+}
+
+async function fetchGitHubUser(accessToken) {
+  const response = await fetch("https://api.github.com/user", {
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${accessToken}`,
+      "User-Agent": "mw4-gunpack-admin",
+      "X-GitHub-Api-Version": "2022-11-28"
+    },
+    signal: AbortSignal.timeout(10_000)
+  });
+  if (!response.ok) throw new Error(`GitHub user request failed: ${response.status}`);
+  return response.json();
+}
+
+async function writeDomesticMirrorToGitHub(accessToken, mirror) {
+  const apiBase = `https://api.github.com/repos/${encodeURIComponent(ADMIN_REPOSITORY_OWNER)}/${encodeURIComponent(ADMIN_REPOSITORY_NAME)}/contents/web/domestic-mirror.json`;
+  const headers = {
+    Accept: "application/vnd.github+json",
+    Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json",
+    "User-Agent": "mw4-gunpack-admin",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+
+  const currentResponse = await fetch(`${apiBase}?ref=main`, {
+    headers,
+    signal: AbortSignal.timeout(10_000)
+  });
+  const current = currentResponse.ok ? await currentResponse.json() : null;
+  const content = `${JSON.stringify(mirror, null, 2)}\n`;
+  const body = {
+    message: "Update domestic Lanzou mirror",
+    content: Buffer.from(content, "utf8").toString("base64"),
+    branch: "main"
+  };
+  if (current?.sha) body.sha = current.sha;
+
+  const updateResponse = await fetch(apiBase, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(15_000)
+  });
+  const result = await updateResponse.json();
+  if (!updateResponse.ok) {
+    throw new Error(result.message || `GitHub update failed: ${updateResponse.status}`);
+  }
+  return {
+    commitSha: result.commit?.sha || null,
+    commitUrl: result.commit?.html_url || null
+  };
+}
+
 async function handleRequest(request, response) {
   applySecurityHeaders(response);
   const method = request.method || "GET";
-  if (method !== "GET" && method !== "HEAD") {
+  const origin = `http://${request.headers.host || "localhost"}`;
+  const url = new URL(request.url || "/", origin);
+  const adminPost = method === "POST" && url.pathname === "/api/admin/domestic-mirror";
+  if (!["GET", "HEAD"].includes(method) && !adminPost) {
     sendJson(response, 405, { error: "Method not allowed" });
     return;
   }
 
-  const origin = `http://${request.headers.host || "localhost"}`;
-  const url = new URL(request.url || "/", origin);
-
   if (url.pathname === "/healthz") {
     sendJson(response, 200, { ok: true, service: "mw4-gunpack-site" });
+    return;
+  }
+
+  if (url.pathname === "/auth/github") {
+    if (!oauthConfigured()) {
+      sendJson(response, 503, {
+        error: "GitHub OAuth is not configured.",
+        required: ["GITHUB_OAUTH_CLIENT_ID", "GITHUB_OAUTH_CLIENT_SECRET", "PUBLIC_BASE_URL"]
+      });
+      return;
+    }
+    const state = randomBytes(24).toString("hex");
+    oauthStates.set(state, { expiresAt: Date.now() + 10 * 60_000 });
+    const authorize = new URL("https://github.com/login/oauth/authorize");
+    authorize.searchParams.set("client_id", process.env.GITHUB_OAUTH_CLIENT_ID);
+    authorize.searchParams.set("redirect_uri", oauthCallbackUrl(request));
+    authorize.searchParams.set("scope", "read:user public_repo");
+    authorize.searchParams.set("state", state);
+    redirect(response, authorize.href);
+    return;
+  }
+
+  if (url.pathname === "/auth/github/callback") {
+    const state = url.searchParams.get("state");
+    const code = url.searchParams.get("code");
+    const stateEntry = state ? oauthStates.get(state) : null;
+    if (state) oauthStates.delete(state);
+    if (!stateEntry || stateEntry.expiresAt <= Date.now() || !code) {
+      sendJson(response, 400, { error: "Invalid or expired OAuth state." });
+      return;
+    }
+
+    try {
+      const accessToken = await exchangeOAuthCode(code, request);
+      const user = await fetchGitHubUser(accessToken);
+      if (!isAuthorizedGitHubUser(user)) {
+        sendJson(response, 403, {
+          error: "This GitHub account is not authorized for the admin console.",
+          user: { id: user.id, login: user.login }
+        });
+        return;
+      }
+
+      const sessionId = randomBytes(32).toString("hex");
+      const csrfToken = randomBytes(24).toString("hex");
+      const expiresAt = Date.now() + ADMIN_SESSION_TTL_MS;
+      adminSessions.set(sessionId, {
+        user: { id: user.id, login: user.login },
+        accessToken,
+        csrfToken,
+        expiresAt
+      });
+      appendSetCookie(
+        response,
+        sessionCookie(request, sessionId, Math.floor(ADMIN_SESSION_TTL_MS / 1000))
+      );
+      redirect(response, "/admin/");
+    } catch (error) {
+      console.error(error);
+      sendJson(response, 502, { error: "GitHub login failed." });
+    }
+    return;
+  }
+
+  if (url.pathname === "/auth/logout") {
+    const sessionId = parseCookies(request).mw4_admin_session;
+    if (sessionId) adminSessions.delete(sessionId);
+    appendSetCookie(response, sessionCookie(request, "", 0));
+    redirect(response, "/admin/");
+    return;
+  }
+
+  if (url.pathname === "/api/admin/session") {
+    if (!oauthConfigured()) {
+      sendJson(response, 503, {
+        error: "后台尚未配置 GitHub OAuth。",
+        configured: false
+      });
+      return;
+    }
+    const adminSession = currentAdminSession(request);
+    if (!adminSession || !isAuthorizedGitHubUser(adminSession.user)) {
+      sendJson(response, 401, {
+        error: "GitHub login required.",
+        loginUrl: "/auth/github"
+      });
+      return;
+    }
+    sendJson(response, 200, {
+      authenticated: true,
+      user: adminSession.user,
+      csrfToken: adminSession.csrfToken,
+      mirror: await readJson(domesticMirrorPath)
+    });
+    return;
+  }
+
+  if (adminPost) {
+    const adminSession = currentAdminSession(request);
+    if (!adminSession || !isAuthorizedGitHubUser(adminSession.user)) {
+      sendJson(response, 401, { error: "GitHub login required." });
+      return;
+    }
+    if (!safeEqual(request.headers["x-csrf-token"] || "", adminSession.csrfToken)) {
+      sendJson(response, 403, { error: "Invalid CSRF token." });
+      return;
+    }
+
+    try {
+      const body = JSON.parse(await readRequestBody(request));
+      const mirror = validateDomesticMirror(body);
+      const commit = await writeDomesticMirrorToGitHub(adminSession.accessToken, mirror);
+      sendJson(response, 200, { ok: true, mirror, commit });
+    } catch (error) {
+      sendJson(response, 400, { error: error.message || "Failed to update mirror." });
+    }
+    return;
+  }
+
+  if (url.pathname === "/admin" || url.pathname === "/admin/") {
+    await serveFile(response, join(adminDir, "index.html"), "text/html; charset=utf-8", method, "no-store");
+    return;
+  }
+
+  if (url.pathname === "/admin/app.js") {
+    await serveFile(response, join(adminDir, "app.js"), "text/javascript; charset=utf-8", method, "no-store");
+    return;
+  }
+
+  if (url.pathname === "/admin/styles.css") {
+    await serveFile(response, join(adminDir, "styles.css"), "text/css; charset=utf-8", method, "no-store");
     return;
   }
 
@@ -403,6 +727,11 @@ async function handleRequest(request, response) {
     sendJson(response, 200, {
       updates: await readWebsiteUpdates()
     });
+    return;
+  }
+
+  if (url.pathname === "/api/domestic-mirror") {
+    sendJson(response, 200, await readJson(domesticMirrorPath));
     return;
   }
 

@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.26",
+      "title": "加入蓝奏云分流与所有者后台",
+      "publishedAt": "2026-10-25T15:22:25Z",
+      "summary": "主页和最新枪包日志新增蓝奏云国内分流，并提供仅限仓库所有者 GitHub 账号维护的后台。",
+      "changes": [
+        "蓝奏云国内分流显示链接与提取密码。",
+        "新增 GitHub OAuth 后台 /admin/。",
+        "后台只接受 GitHub 用户 ID 317516594。",
+        "仅允许保存蓝奏云域名链接，并使用 OAuth 用户自己的权限提交仓库变更。",
+        "保存后由现有 Pages 工作流自动更新网页。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.25",
       "title": "新增下载节点自动测速",
       "publishedAt": "2026-10-25T15:16:17Z",

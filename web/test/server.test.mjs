@@ -4,11 +4,13 @@ import { once } from "node:events";
 import { readFile } from "node:fs/promises";
 import {
   createAppServer,
+  isAuthorizedGitHubUser,
   normalizeRelease,
   pickPackRelease,
   readGunPackManifest,
   readWebsiteUpdates,
-  sortReleasesByDate
+  sortReleasesByDate,
+  validateDomesticMirror
 } from "../server.mjs";
 import { toDetailPage, toStaticManifest } from "../scripts/build-static.mjs";
 import {
@@ -84,8 +86,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 25);
-  assert.equal(updates[0].id, "website-v1.0.25");
+  assert.ok(updates.length >= 26);
+  assert.equal(updates[0].id, "website-v1.0.26");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -126,6 +128,25 @@ test("excludes the known resetting mirror host", async () => {
     mirrorConfig.mirrors.some((mirror) => mirror.prefix.includes("gh.my-website.ccwu.cc")),
     false
   );
+});
+
+test("admin authentication only accepts the owner GitHub id", () => {
+  assert.equal(isAuthorizedGitHubUser({ id: 317516594, login: "Skydeps1459" }), true);
+  assert.equal(isAuthorizedGitHubUser({ id: 1, login: "someone-else" }), false);
+});
+
+test("validates domestic Lanzou mirror updates", () => {
+  const mirror = validateDomesticMirror({
+    label: "蓝奏云国内分流",
+    url: "https://wwaxl.lanzouc.com/itbK24dd0odi",
+    password: "6wgt"
+  });
+  assert.equal(mirror.url, "https://wwaxl.lanzouc.com/itbK24dd0odi");
+  assert.throws(() => validateDomesticMirror({
+    label: "bad",
+    url: "https://example.com/file",
+    password: ""
+  }), /蓝奏云/);
 });
 
 test("serves health and local gun pack data", async (t) => {
@@ -177,5 +198,16 @@ test("serves health and local gun pack data", async (t) => {
   assert.equal(websiteUpdateApiResponse.status, 200);
   const websiteUpdateApi = await websiteUpdateApiResponse.json();
   assert.ok(websiteUpdateApi.updates.length >= 2);
+
+  const domesticMirrorResponse = await fetch(`${baseUrl}/api/domestic-mirror`);
+  assert.equal(domesticMirrorResponse.status, 200);
+  assert.equal((await domesticMirrorResponse.json()).password, "6wgt");
+
+  const adminPageResponse = await fetch(`${baseUrl}/admin/`);
+  assert.equal(adminPageResponse.status, 200);
+  assert.match(await adminPageResponse.text(), /分流管理/);
+
+  const adminSessionResponse = await fetch(`${baseUrl}/api/admin/session`);
+  assert.equal(adminSessionResponse.status, 503);
 });
 

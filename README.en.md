@@ -13,8 +13,9 @@ website.
 
 Website: <https://skydeps1459.github.io/Modern-Warfare-4-TACZ-GunPack/>
 
-Download buttons use `https://github.akams.cn` for mirror selection and keep
-the original GitHub Release URL as a fallback.
+Download buttons test the configured accelerator candidates during each build,
+select the fastest stable mirror, and keep the original GitHub Release URL as a
+fallback.
 
 > The Lite pack is frozen. This repository only maintains the main
 > `Modern Warfare 4` package. Website, API, and GitHub workflow files are
@@ -64,8 +65,17 @@ GitHub Pages build. It provides:
 - A separate website-update history and third-level detail pages for each
   website update.
 - Five-minute data refreshes and scheduled GitHub Pages rebuilds.
-- `github.akams.cn` accelerated downloads with direct GitHub links.
+- Automatically selected stable accelerator downloads with direct GitHub links.
+- A Lanzou Cloud domestic mirror with its sharing password.
 - Health checks, automated tests, and a Dockerfile.
+
+### Domestic mirror admin
+
+The Node.js backend exposes a Lanzou mirror editor at `/admin/`. It uses GitHub
+OAuth and accepts only the repository owner's immutable GitHub user ID
+`317516594`. Saves are committed to `web/domestic-mirror.json` using the
+owner's own `public_repo` permission; no repository write secret is exposed to
+the browser. See [`web/admin/README.md`](./web/admin/README.md).
 
 Start it from the repository root:
 

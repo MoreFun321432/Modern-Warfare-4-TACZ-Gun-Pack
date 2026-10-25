@@ -43,3 +43,30 @@ export async function loadDownloadConfig(baseUrl = new URL("./", document.baseUR
   }
 }
 
+export async function loadDomesticMirror(baseUrl = new URL("./", document.baseURI)) {
+  const siteBase = typeof baseUrl === "string"
+    ? new URL(baseUrl, document.baseURI)
+    : baseUrl;
+  const endpoint = new URL("api/domestic-mirror.json", siteBase);
+  endpoint.searchParams.set("v", Date.now().toString());
+
+  try {
+    const response = await fetch(endpoint, {
+      headers: { Accept: "application/json" },
+      cache: "no-store"
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const mirror = await response.json();
+    const url = new URL(mirror.url);
+    if (!["http:", "https:"].includes(url.protocol)) throw new Error("Invalid URL");
+    return {
+      label: String(mirror.label || "国内分流"),
+      url: url.href,
+      password: String(mirror.password || "")
+    };
+  } catch (error) {
+    console.info("Domestic mirror unavailable.", error.message);
+    return null;
+  }
+}
+

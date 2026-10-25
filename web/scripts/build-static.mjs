@@ -215,6 +215,7 @@ export async function buildStaticSite() {
     "utf8"
   );
   await cp(join(webDir, "website-updates.json"), join(distDir, "api", "website-updates.json"));
+  await cp(join(webDir, "domestic-mirror.json"), join(distDir, "api", "domestic-mirror.json"));
 
   const [detailTemplate, websiteUpdates] = await Promise.all([
     readFile(join(webDir, "templates", "website-update-detail.html"), "utf8"),

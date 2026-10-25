@@ -7,12 +7,13 @@ import {
   renderReleaseNotes
 } from "./release-data.js?v=20261025-8";
 import { loadDownloadConfig } from "./download-config.js?v=20261025-1";
+import { loadDomesticMirror } from "./download-config.js?v=20261025-1";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
 
-function createReleaseEntry(release, acceleratorPrefix) {
+function createReleaseEntry(release, acceleratorPrefix, domesticMirror, isLatestPack) {
   const article = document.createElement("article");
   article.className = "release-entry";
   article.id = releaseAnchor(release.tag);
@@ -39,6 +40,16 @@ function createReleaseEntry(release, acceleratorPrefix) {
     accelerated.rel = "noreferrer";
     accelerated.textContent = "加速下载";
     actions.append(accelerated);
+  }
+  if (isLatestPack && domesticMirror) {
+    const domestic = document.createElement("a");
+    domestic.className = "button button-outline";
+    domestic.href = domesticMirror.url;
+    domestic.rel = "noreferrer";
+    domestic.textContent = domesticMirror.password
+      ? `${domesticMirror.label} · 密码 ${domesticMirror.password}`
+      : domesticMirror.label;
+    actions.append(domestic);
   }
   const direct = document.createElement("a");
   direct.className = release.asset ? "button button-ghost" : "button button-outline";
@@ -84,9 +95,10 @@ function scrollToCurrentHash() {
 
 async function renderChangelog() {
   try {
-    const [releases, downloadConfig] = await Promise.all([
+    const [releases, downloadConfig, domesticMirror] = await Promise.all([
       loadPackReleases(),
-      loadDownloadConfig()
+      loadDownloadConfig(),
+      loadDomesticMirror()
     ]);
     count.textContent = `${releases.length} 个版本`;
     list.replaceChildren();
@@ -99,8 +111,15 @@ async function renderChangelog() {
     }
 
     const fragment = document.createDocumentFragment();
-    releases.forEach((release) =>
-      fragment.append(createReleaseEntry(release, downloadConfig.selected.prefix))
+    releases.forEach((release, index) =>
+      fragment.append(
+        createReleaseEntry(
+          release,
+          downloadConfig.selected.prefix,
+          domesticMirror,
+          index === 0
+        )
+      )
     );
     list.append(fragment);
 

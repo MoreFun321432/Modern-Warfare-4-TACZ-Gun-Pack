@@ -10,6 +10,7 @@ import {
 } from "./website-update-data.js?v=20261025-6";
 import {
   accelerateDownloadUrl,
+  loadDomesticMirror,
   loadDownloadConfig
 } from "./download-config.js?v=20261025-1";
 
@@ -27,6 +28,7 @@ const elements = {
   assetSize: document.querySelector("#asset-size"),
   downloadAccelerated: document.querySelector("#download-accelerated"),
   downloadDirect: document.querySelector("#download-direct"),
+  downloadLanzou: document.querySelector("#download-lanzou"),
   recentReleases: document.querySelector("#recent-releases"),
   homepageWebsiteUpdates: document.querySelector("#homepage-website-updates"),
   repoLinks: [
@@ -83,6 +85,19 @@ async function refreshDownloadAccelerator() {
   const config = await loadDownloadConfig();
   acceleratorPrefix = config.selected.prefix;
   if (currentDownloadUrl) applyDownloadLinks(currentDownloadUrl);
+}
+
+async function loadDomesticMirrorLink() {
+  const mirror = await loadDomesticMirror();
+  if (!mirror) {
+    elements.downloadLanzou.hidden = true;
+    return;
+  }
+  elements.downloadLanzou.href = mirror.url;
+  elements.downloadLanzou.textContent = mirror.password
+    ? `${mirror.label} · 密码 ${mirror.password}`
+    : mirror.label;
+  elements.downloadLanzou.hidden = false;
 }
 
 function createGunCard(gun, index) {
@@ -304,7 +319,8 @@ async function refreshPublicData() {
       loadStatus(),
       loadRecentReleases(),
       loadHomepageWebsiteUpdates(),
-      refreshDownloadAccelerator()
+      refreshDownloadAccelerator(),
+      loadDomesticMirrorLink()
     ]);
     lastRefreshAt = Date.now();
   } finally {

@@ -46,11 +46,16 @@ Endpoints:
 - `GET /api/gunpack`: local gun pack manifest.
 - `GET /api/releases`: up to 30 GitHub Releases with notes and asset metadata.
 - `GET /api/website-updates`: repository-managed website update history.
+- `GET /api/domestic-mirror`: current Lanzou Cloud mirror and password.
 - `GET /api/download`: redirects to the latest release zip.
 - `GET /api/download?accelerated=1`: redirects through the verified
   `gh-proxy.com` accelerator.
 - `GET /api/icons/:id`: serves a gun icon from the pack.
 - `GET /healthz`: health check.
+- `GET /admin/`: owner-only mirror editor.
+- `GET /auth/github`: GitHub OAuth login.
+- `GET /api/admin/session`: current admin session and mirror.
+- `POST /api/admin/domestic-mirror`: commit mirror changes to GitHub.
 
 The static build tests `web/download-mirrors.json`, rejects reset/timeout and
 unexpected HTML responses, and writes `api/download-config.json` with the

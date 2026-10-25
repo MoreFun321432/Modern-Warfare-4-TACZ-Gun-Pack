@@ -65,6 +65,7 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 - 网页打开时每 5 分钟自动刷新数据，GitHub Pages 每 5 分钟重建静态快照。
 - 提供枪包清单 API、图标 API 和最新版本下载跳转。
 - 主下载按钮使用构建时自动筛选的最快稳定节点，GitHub 原链保留为备用。
+- 国内用户可通过蓝奏云分流下载，网页会显示当前分享密码。
 - 包含响应式中文展示页、健康检查、自动化测试和 Dockerfile。
 
 从仓库根目录启动：
@@ -81,6 +82,14 @@ node web/server.mjs
 - `PORT`：HTTP 端口，默认 `3000`
 - `GITHUB_OWNER` / `GITHUB_REPO`：覆盖 `web/config.json` 中的仓库坐标
 - `GITHUB_TOKEN`：可选，提高 GitHub API 匿名调用限额
+
+### 分流后台
+
+Node.js 后端提供 `/admin/` 蓝奏云分流管理页，使用 GitHub OAuth 登录。
+后台只接受仓库所有者不可变的 GitHub 用户 ID `317516594`，不接受其他账号。
+保存时使用登录用户自己的 `public_repo` 权限提交 `web/domestic-mirror.json`，
+浏览器不会接触仓库写密钥。OAuth 配置与部署方法见
+[`web/admin/README.md`](./web/admin/README.md)。
 
 ## 目录
 
