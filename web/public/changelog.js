@@ -30,17 +30,20 @@ function createReleaseEntry(release) {
 
   const actions = document.createElement("div");
   actions.className = "release-actions";
-  const accelerated = document.createElement("a");
-  accelerated.className = "button button-primary";
-  accelerated.href = acceleratedReleaseUrl(release.downloadUrl);
-  accelerated.rel = "noreferrer";
-  accelerated.textContent = "加速下载";
+  if (release.asset) {
+    const accelerated = document.createElement("a");
+    accelerated.className = "button button-primary";
+    accelerated.href = acceleratedReleaseUrl(release.downloadUrl);
+    accelerated.rel = "noreferrer";
+    accelerated.textContent = "加速下载";
+    actions.append(accelerated);
+  }
   const direct = document.createElement("a");
-  direct.className = "button button-ghost";
+  direct.className = release.asset ? "button button-ghost" : "button button-outline";
   direct.href = release.url;
   direct.rel = "noreferrer";
-  direct.textContent = "GitHub Release ↗";
-  actions.append(accelerated, direct);
+  direct.textContent = release.asset ? "GitHub Release ↗" : "查看发行说明 ↗";
+  actions.append(direct);
   header.append(copy, actions);
 
   const facts = document.createElement("div");
