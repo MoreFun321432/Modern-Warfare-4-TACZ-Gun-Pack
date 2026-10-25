@@ -1,7 +1,7 @@
 import {
   formatWebsiteUpdateDate,
   loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-4";
+} from "./website-update-data.js?v=20261025-5";
 
 const shell = document.querySelector("#website-update-detail");
 const crumb = document.querySelector("#website-detail-crumb");
@@ -25,7 +25,11 @@ function createChangeSection(title, items) {
 
 function requestedUpdateId() {
   const params = new URLSearchParams(window.location.search);
-  return params.get("id") || window.location.hash.replace(/^#web-update-/, "");
+  const pathId = window.location.pathname.match(/\/website-updates\/([^/]+)\.html$/i)?.[1];
+  return document.documentElement.dataset.updateId
+    || (pathId ? decodeURIComponent(pathId) : null)
+    || params.get("id")
+    || window.location.hash.replace(/^#web-update-/, "");
 }
 
 function renderUpdate(update) {
@@ -97,7 +101,7 @@ async function renderWebsiteUpdateDetail() {
   }
 
   try {
-    const updates = await loadWebsiteUpdates();
+    const updates = await loadWebsiteUpdates(document.documentElement.dataset.siteBase || "./");
     const update = updates.find((item) => item.id === id);
     if (!update) {
       shell.replaceChildren();

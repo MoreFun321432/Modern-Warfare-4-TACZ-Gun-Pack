@@ -1,6 +1,20 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.13",
+      "title": "网页更新使用独立详情页",
+      "publishedAt": "2026-10-25T13:41:45Z",
+      "summary": "每条网页更新改为独立的静态详情页路径，旧的查询参数链接会自动重定向。",
+      "changes": [
+        "构建时为每条网页更新生成 website-updates/<版本>.html。",
+        "网页更新列表直接链接到对应独立详情页。",
+        "旧的 website-update.html?id=... 链接自动跳转到新路径。",
+        "详情页继续展示完整内容与问题修复，不提供下载。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.12",
       "title": "网页更新加入三级详情页",
       "publishedAt": "2026-10-25T13:38:31Z",

@@ -1,7 +1,12 @@
-import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { normalizeRelease, readGunPackManifest, sortReleasesByDate } from "../server.mjs";
+import {
+  normalizeRelease,
+  readGunPackManifest,
+  readWebsiteUpdates,
+  sortReleasesByDate
+} from "../server.mjs";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const webDir = resolve(scriptDir, "..");
@@ -83,14 +88,23 @@ export function toStaticManifest(manifest) {
   };
 }
 
+export function toDetailPage(template, updateId) {
+  if (!/^[a-z0-9._-]+$/i.test(updateId)) {
+    throw new Error(`Invalid website update id: ${updateId}`);
+  }
+  return template.replaceAll("{{UPDATE_ID}}", updateId);
+}
+
 export async function buildStaticSite() {
   const publicDir = join(webDir, "public");
   const distDir = join(webDir, "dist");
   const iconSourceDir = join(projectRoot, "assets", "mw4", "textures", "gun", "slot");
   const iconOutputDir = join(distDir, "api", "icons");
+  const detailOutputDir = join(distDir, "website-updates");
 
   await rm(distDir, { recursive: true, force: true });
   await mkdir(iconOutputDir, { recursive: true });
+  await mkdir(detailOutputDir, { recursive: true });
   const publicEntries = await readdir(publicDir);
   for (const name of publicEntries) {
     if (!name.includes(".bak")) {
@@ -109,6 +123,18 @@ export async function buildStaticSite() {
   await writeFile(join(distDir, "api", "repository.json"), `${JSON.stringify(repository, null, 2)}\n`, "utf8");
   await cp(join(webDir, "website-updates.json"), join(distDir, "api", "website-updates.json"));
 
+  const [detailTemplate, websiteUpdates] = await Promise.all([
+    readFile(join(webDir, "templates", "website-update-detail.html"), "utf8"),
+    readWebsiteUpdates()
+  ]);
+  for (const update of websiteUpdates) {
+    await writeFile(
+      join(detailOutputDir, `${update.id}.html`),
+      toDetailPage(detailTemplate, update.id),
+      "utf8"
+    );
+  }
+
   const iconNames = new Set(manifest.guns.map((gun) => `${gun.id}.png`));
   const sourceFiles = await readdir(iconSourceDir);
   for (const name of sourceFiles) {
@@ -117,7 +143,10 @@ export async function buildStaticSite() {
     }
   }
 
-  console.log(`Built static site: ${manifest.version}, ${manifest.guns.length} guns, ${releases.length} releases`);
+  console.log(
+    `Built static site: ${manifest.version}, ${manifest.guns.length} guns, ` +
+      `${releases.length} releases, ${websiteUpdates.length} website detail pages`
+  );
   return staticManifest;
 }
 

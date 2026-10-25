@@ -15,10 +15,13 @@ async function fetchJson(url) {
   return response.json();
 }
 
-export async function loadWebsiteUpdates() {
-  const localApi = new URL("api/website-updates", document.baseURI);
+export async function loadWebsiteUpdates(baseUrl = new URL("./", document.baseURI)) {
+  const siteBase = typeof baseUrl === "string"
+    ? new URL(baseUrl, document.baseURI)
+    : baseUrl;
+  const localApi = new URL("api/website-updates", siteBase);
   localApi.searchParams.set("v", Date.now().toString());
-  const staticApi = new URL("api/website-updates.json", document.baseURI);
+  const staticApi = new URL("api/website-updates.json", siteBase);
   staticApi.searchParams.set("v", Date.now().toString());
 
   for (const source of [localApi, staticApi]) {

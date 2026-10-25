@@ -34,6 +34,7 @@ const staticFiles = new Map([
   ["/changelog.js", { file: "changelog.js", type: "text/javascript; charset=utf-8" }],
   ["/website-updates.js", { file: "website-updates.js", type: "text/javascript; charset=utf-8" }],
   ["/website-update.js", { file: "website-update.js", type: "text/javascript; charset=utf-8" }],
+  ["/website-update-redirect.js", { file: "website-update-redirect.js", type: "text/javascript; charset=utf-8" }],
   ["/website-update-data.js", { file: "website-update-data.js", type: "text/javascript; charset=utf-8" }],
   ["/release-data.js", { file: "release-data.js", type: "text/javascript; charset=utf-8" }]
 ]);
@@ -413,6 +414,20 @@ async function handleRequest(request, response) {
     }
     const file = join(gunIconRoot, `${id}.png`);
     await serveFile(response, file, "image/png", method);
+    return;
+  }
+
+  const detailMatch = url.pathname.match(/^\/website-updates\/([a-z0-9._-]+)\.html$/i);
+  if (detailMatch) {
+    const updateId = detailMatch[1];
+    const template = await readFile(join(serverDir, "templates", "website-update-detail.html"), "utf8");
+    const body = template.replaceAll("{{UPDATE_ID}}", updateId);
+    response.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+      "Content-Length": Buffer.byteLength(body),
+      "Cache-Control": "public, max-age=300"
+    });
+    response.end(body);
     return;
   }
 

@@ -9,7 +9,7 @@ import {
   readWebsiteUpdates,
   sortReleasesByDate
 } from "../server.mjs";
-import { toStaticManifest } from "../scripts/build-static.mjs";
+import { toDetailPage, toStaticManifest } from "../scripts/build-static.mjs";
 import {
   extractReleaseSummary,
   isPackRelease,
@@ -81,10 +81,16 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 12);
-  assert.equal(updates[0].id, "website-v1.0.12");
+  assert.ok(updates.length >= 13);
+  assert.equal(updates[0].id, "website-v1.0.13");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
+});
+
+test("renders a dedicated detail page for each update id", () => {
+  const page = toDetailPage('<html data-update-id="{{UPDATE_ID}}"><title>{{UPDATE_ID}}</title></html>', "website-v1.0.13");
+  assert.match(page, /data-update-id="website-v1\.0\.13"/);
+  assert.match(page, /<title>website-v1\.0\.13<\/title>/);
 });
 
 test("serves health and local gun pack data", async (t) => {
@@ -127,6 +133,10 @@ test("serves health and local gun pack data", async (t) => {
   const websiteUpdateDetailResponse = await fetch(`${baseUrl}/website-update.html`);
   assert.equal(websiteUpdateDetailResponse.status, 200);
   assert.match(await websiteUpdateDetailResponse.text(), /网页更新详情/);
+
+  const dedicatedDetailResponse = await fetch(`${baseUrl}/website-updates/website-v1.0.12.html`);
+  assert.equal(dedicatedDetailResponse.status, 200);
+  assert.match(await dedicatedDetailResponse.text(), /website-v1\.0\.12/);
 
   const websiteUpdateApiResponse = await fetch(`${baseUrl}/api/website-updates`);
   assert.equal(websiteUpdateApiResponse.status, 200);
