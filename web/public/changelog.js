@@ -67,6 +67,20 @@ function createReleaseEntry(release) {
   return article;
 }
 
+function scrollToCurrentHash() {
+  const encodedId = window.location.hash.slice(1);
+  if (!encodedId) return;
+
+  let targetId = encodedId;
+  try {
+    targetId = decodeURIComponent(encodedId);
+  } catch {
+    // Keep the original fragment when it is not valid percent-encoding.
+  }
+
+  document.getElementById(targetId)?.scrollIntoView({ block: "start" });
+}
+
 async function renderChangelog() {
   try {
     const releases = await loadPackReleases();
@@ -84,9 +98,7 @@ async function renderChangelog() {
     releases.forEach((release) => fragment.append(createReleaseEntry(release)));
     list.append(fragment);
 
-    if (window.location.hash) {
-      document.querySelector(window.location.hash)?.scrollIntoView();
-    }
+    scrollToCurrentHash();
   } catch (error) {
     console.error(error);
     list.replaceChildren();

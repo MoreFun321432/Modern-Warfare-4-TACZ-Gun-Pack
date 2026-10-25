@@ -72,6 +72,20 @@ function createWebsiteUpdateEntry(update) {
   return article;
 }
 
+function scrollToCurrentHash() {
+  const encodedId = window.location.hash.slice(1);
+  if (!encodedId) return;
+
+  let targetId = encodedId;
+  try {
+    targetId = decodeURIComponent(encodedId);
+  } catch {
+    // Keep the original fragment when it is not valid percent-encoding.
+  }
+
+  document.getElementById(targetId)?.scrollIntoView({ block: "start" });
+}
+
 async function renderWebsiteUpdates() {
   try {
     const updates = await loadWebsiteUpdates();
@@ -90,9 +104,7 @@ async function renderWebsiteUpdates() {
     updates.forEach((update) => fragment.append(createWebsiteUpdateEntry(update)));
     list.append(fragment);
 
-    if (window.location.hash) {
-      document.querySelector(window.location.hash)?.scrollIntoView();
-    }
+    scrollToCurrentHash();
   } catch (error) {
     console.error(error);
     list.replaceChildren();

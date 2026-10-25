@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.10",
+      "title": "修复网页更新直达链接",
+      "publishedAt": "2026-10-25T13:31:33Z",
+      "summary": "带网页版本锚点的直达链接现在可以正常打开，并定位到对应更新记录。",
+      "changes": [
+        "改用 getElementById 解析 URL 锚点。",
+        "支持网页版本号中的小数点和百分号编码。",
+        "同步加固枪包更新日志的锚点定位。"
+      ],
+      "bugFixes": [
+        "修复直接访问 #web-update-website-v1.0.9 等链接时显示“网页更新记录暂时无法载入”的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.9",
       "title": "网页数据每 5 分钟自动更新",
       "publishedAt": "2026-10-25T13:19:02Z",
