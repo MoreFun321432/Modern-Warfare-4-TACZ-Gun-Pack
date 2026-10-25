@@ -5,6 +5,7 @@ import {
 
 const list = document.querySelector("#website-update-list");
 const count = document.querySelector("#website-release-count");
+const AUTO_REFRESH_MS = 5 * 60 * 1000;
 
 function createChangeSection(title, items) {
   if (!Array.isArray(items) || items.length === 0) return null;
@@ -102,5 +103,21 @@ async function renderWebsiteUpdates() {
   }
 }
 
-renderWebsiteUpdates();
+let refreshInFlight = false;
+
+async function refreshWebsiteUpdates() {
+  if (refreshInFlight || document.visibilityState === "hidden") return;
+  refreshInFlight = true;
+  try {
+    await renderWebsiteUpdates();
+  } finally {
+    refreshInFlight = false;
+  }
+}
+
+refreshWebsiteUpdates();
+setInterval(refreshWebsiteUpdates, AUTO_REFRESH_MS);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") refreshWebsiteUpdates();
+});
 

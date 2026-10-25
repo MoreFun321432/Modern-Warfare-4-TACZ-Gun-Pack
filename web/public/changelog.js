@@ -9,6 +9,7 @@ import {
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");
+const AUTO_REFRESH_MS = 5 * 60 * 1000;
 
 function createReleaseEntry(release) {
   const article = document.createElement("article");
@@ -96,5 +97,21 @@ async function renderChangelog() {
   }
 }
 
-renderChangelog();
+let refreshInFlight = false;
+
+async function refreshChangelog() {
+  if (refreshInFlight || document.visibilityState === "hidden") return;
+  refreshInFlight = true;
+  try {
+    await renderChangelog();
+  } finally {
+    refreshInFlight = false;
+  }
+}
+
+refreshChangelog();
+setInterval(refreshChangelog, AUTO_REFRESH_MS);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") refreshChangelog();
+});
 

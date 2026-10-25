@@ -41,6 +41,7 @@ const releasesUrl = `${repositoryUrl}/releases`;
 const acceleratedDownloadUrl = (url) => `https://github.akams.cn/?url=${encodeURIComponent(url)}`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
+const AUTO_REFRESH_MS = 5 * 60 * 1000;
 const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
   year: "numeric",
   month: "2-digit",
@@ -279,7 +280,29 @@ async function loadHomepageWebsiteUpdates() {
   }
 }
 
+let refreshInFlight = false;
+let lastRefreshAt = 0;
+
+async function refreshPublicData() {
+  if (refreshInFlight || document.visibilityState === "hidden") return;
+  refreshInFlight = true;
+  try {
+    await Promise.allSettled([
+      loadStatus(),
+      loadRecentReleases(),
+      loadHomepageWebsiteUpdates()
+    ]);
+    lastRefreshAt = Date.now();
+  } finally {
+    refreshInFlight = false;
+  }
+}
+
 applyDownloadLinks(releasesUrl);
-loadStatus();
-loadRecentReleases();
-loadHomepageWebsiteUpdates();
+refreshPublicData();
+setInterval(refreshPublicData, AUTO_REFRESH_MS);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && Date.now() - lastRefreshAt >= AUTO_REFRESH_MS) {
+    refreshPublicData();
+  }
+});

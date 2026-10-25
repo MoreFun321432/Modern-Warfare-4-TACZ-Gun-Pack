@@ -1,6 +1,19 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.9",
+      "title": "网页数据每 5 分钟自动更新",
+      "publishedAt": "2026-10-25T13:19:02Z",
+      "summary": "打开网页时定时刷新数据，GitHub Pages 也会按五分钟计划重建静态快照。",
+      "changes": [
+        "主页、枪包日志页和网页更新页每 5 分钟自动刷新。",
+        "页面切回前台时会立即检查并刷新数据。",
+        "GitHub Pages 增加每 5 分钟运行一次的定时构建。"
+      ],
+      "bugFixes": [],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.8",
       "title": "修复静态仓库快照字段映射",
       "publishedAt": "2026-10-25T13:17:19Z",

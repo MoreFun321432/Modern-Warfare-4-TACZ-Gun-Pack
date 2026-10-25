@@ -10,6 +10,8 @@ on:
       - "assets/mw4/textures/gun/slot/**"
       - "data/mw4/index/guns/**"
       - ".github/workflows/pages.yml"
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 permissions:

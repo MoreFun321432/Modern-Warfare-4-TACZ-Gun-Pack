@@ -16,6 +16,8 @@ gun-pack changelog. Every visible website change must update
 `web/website-updates.json` in the same commit. The page reads this file through
 `GET /api/website-updates` locally and `api/website-updates.json` on Pages.
 Standalone `website-*` Releases are optional and never provide a download.
+The Pages workflow rebuilds every five minutes, and open pages refresh their
+data on the same interval.
 
 The gun pack content follows TACZ's GPL-3.0 license. This website's source
 code and documentation are licensed separately under MIT.
