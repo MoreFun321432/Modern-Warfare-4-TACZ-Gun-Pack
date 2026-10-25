@@ -13,6 +13,7 @@ import {
   loadDomesticMirror,
   loadDownloadConfig
 } from "./download-config.js?v=20261025-2";
+import { bindDomesticMirrorCopy } from "./domestic-mirror.js?v=20261025-1";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),
@@ -98,6 +99,7 @@ async function loadDomesticMirrorLink() {
     ? `${mirror.label} · 密码 ${mirror.password}`
     : mirror.label;
   elements.downloadLanzou.hidden = false;
+  bindDomesticMirrorCopy(elements.downloadLanzou, mirror);
 }
 
 function createGunCard(gun, index) {

@@ -10,6 +10,7 @@ import {
   loadDomesticMirror,
   loadDownloadConfig
 } from "./download-config.js?v=20261025-2";
+import { bindDomesticMirrorCopy } from "./domestic-mirror.js?v=20261025-1";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");
@@ -51,6 +52,7 @@ function createReleaseEntry(release, acceleratorPrefix, domesticMirror, isLatest
     domestic.textContent = domesticMirror.password
       ? `${domesticMirror.label} · 密码 ${domesticMirror.password}`
       : domesticMirror.label;
+    bindDomesticMirrorCopy(domestic, domesticMirror);
     actions.append(domestic);
   }
   const direct = document.createElement("a");

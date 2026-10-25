@@ -1011,6 +1011,34 @@ footer .admin-entry:hover {
   opacity: 1;
 }
 
+.copy-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 100;
+  max-width: min(90vw, 540px);
+  padding: 13px 18px;
+  color: #11150f;
+  background: var(--acid);
+  border: 1px solid var(--acid-strong);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.38);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.copy-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.copy-toast[hidden] {
+  display: none;
+}
+
 @media (max-width: 1050px) {
   .hero {
     grid-template-columns: 1fr;
