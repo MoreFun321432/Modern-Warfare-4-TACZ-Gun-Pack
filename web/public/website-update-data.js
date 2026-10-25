@@ -39,6 +39,10 @@ export async function loadWebsiteUpdates(baseUrl = new URL("./", document.baseUR
   return [];
 }
 
+export function websiteUpdateDetailPath(updateId) {
+  return `./website-updates/${encodeURIComponent(updateId)}.html?v=20261025-11`;
+}
+
 export function createHomepageWebsiteUpdate(update) {
   const article = document.createElement("article");
   article.className = "home-website-update";
@@ -57,7 +61,7 @@ export function createHomepageWebsiteUpdate(update) {
   const summary = document.createElement("p");
   summary.textContent = update.summary || "查看本次网页版本包含的完整变更。";
   const link = document.createElement("a");
-  link.href = `./website-updates.html?v=20261025-9#web-update-${update.id}`;
+  link.href = websiteUpdateDetailPath(update.id);
   link.textContent = "查看完整记录";
 
   article.append(meta, heading, summary, link);

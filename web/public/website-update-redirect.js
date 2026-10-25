@@ -5,6 +5,6 @@ const safeId = id && /^[a-z0-9._-]+$/i.test(id) ? id : null;
 if (safeId) {
   window.location.replace(`./website-updates/${encodeURIComponent(safeId)}.html`);
 } else {
-  window.location.replace("./website-updates.html?v=20261025-10");
+  window.location.replace("./website-updates.html?v=20261025-11");
 }
 

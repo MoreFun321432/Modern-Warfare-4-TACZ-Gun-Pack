@@ -1,7 +1,8 @@
 import {
   formatWebsiteUpdateDate,
-  loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-5";
+  loadWebsiteUpdates,
+  websiteUpdateDetailPath
+} from "./website-update-data.js?v=20261025-6";
 
 const list = document.querySelector("#website-update-list");
 const count = document.querySelector("#website-release-count");
@@ -29,7 +30,7 @@ function createWebsiteUpdateEntry(update) {
   actions.className = "release-actions";
   const detailLink = document.createElement("a");
   detailLink.className = "button button-primary";
-  detailLink.href = `./website-updates/${encodeURIComponent(update.id)}.html?v=20261025-10`;
+  detailLink.href = websiteUpdateDetailPath(update.id);
   detailLink.textContent = "查看完整更新日志";
   actions.append(detailLink);
   if (update.releaseUrl) {

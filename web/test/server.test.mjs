@@ -16,6 +16,7 @@ import {
   isWebsiteRelease,
   normalizeRelease as normalizeClientRelease
 } from "../public/release-data.js";
+import { websiteUpdateDetailPath } from "../public/website-update-data.js";
 
 test("reads the live gun pack manifest", async () => {
   const manifest = await readGunPackManifest();
@@ -81,8 +82,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 13);
-  assert.equal(updates[0].id, "website-v1.0.13");
+  assert.ok(updates.length >= 14);
+  assert.equal(updates[0].id, "website-v1.0.14");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -91,6 +92,13 @@ test("renders a dedicated detail page for each update id", () => {
   const page = toDetailPage('<html data-update-id="{{UPDATE_ID}}"><title>{{UPDATE_ID}}</title></html>', "website-v1.0.13");
   assert.match(page, /data-update-id="website-v1\.0\.13"/);
   assert.match(page, /<title>website-v1\.0\.13<\/title>/);
+});
+
+test("builds one canonical home-card detail path", () => {
+  assert.equal(
+    websiteUpdateDetailPath("website-v1.0.14"),
+    "./website-updates/website-v1.0.14.html?v=20261025-11"
+  );
 });
 
 test("serves health and local gun pack data", async (t) => {

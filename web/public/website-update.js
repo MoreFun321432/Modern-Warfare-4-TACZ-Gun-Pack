@@ -1,7 +1,7 @@
 import {
   formatWebsiteUpdateDate,
   loadWebsiteUpdates
-} from "./website-update-data.js?v=20261025-5";
+} from "./website-update-data.js?v=20261025-6";
 
 const shell = document.querySelector("#website-update-detail");
 const crumb = document.querySelector("#website-detail-crumb");
@@ -64,7 +64,7 @@ function renderUpdate(update) {
   }
   const backLink = document.createElement("a");
   backLink.className = "button button-outline";
-  backLink.href = "./website-updates.html?v=20261025-9";
+  backLink.href = "./website-updates.html?v=20261025-11";
   backLink.textContent = "返回网页更新";
   actions.append(backLink);
   header.append(copy, actions);
