@@ -1,4 +1,4 @@
-import { createHomeReleaseCard, loadReleases, pickPackRelease } from "./release-data.js?v=20261025-3";
+import { createHomeReleaseCard, loadReleases, pickPackRelease } from "./release-data.js?v=20261025-4";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),

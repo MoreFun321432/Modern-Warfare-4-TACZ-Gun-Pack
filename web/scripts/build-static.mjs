@@ -1,7 +1,7 @@
 import { cp, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { normalizeRelease, readGunPackManifest } from "../server.mjs";
+import { normalizeRelease, readGunPackManifest, sortReleasesByDate } from "../server.mjs";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const webDir = resolve(scriptDir, "..");
@@ -28,7 +28,7 @@ export async function fetchStaticReleases({
     );
     if (!response.ok) throw new Error(`GitHub API ${response.status}`);
     const releases = await response.json();
-    return releases.filter((release) => !release.draft).map(normalizeRelease);
+    return sortReleasesByDate(releases.filter((release) => !release.draft).map(normalizeRelease));
   } catch (error) {
     console.warn(`Could not snapshot GitHub Releases: ${error.message}`);
     return [];

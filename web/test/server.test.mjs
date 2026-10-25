@@ -1,7 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { createAppServer, normalizeRelease, pickPackRelease, readGunPackManifest } from "../server.mjs";
+import {
+  createAppServer,
+  normalizeRelease,
+  pickPackRelease,
+  readGunPackManifest,
+  sortReleasesByDate
+} from "../server.mjs";
 import { toStaticManifest } from "../scripts/build-static.mjs";
 import { extractReleaseSummary, normalizeRelease as normalizeClientRelease } from "../public/release-data.js";
 
@@ -48,6 +54,14 @@ test("keeps downloads attached to the pack release when a site release is newer"
   const siteRelease = { tag: "website-v1.0.0", asset: null, prerelease: false };
   const packRelease = { tag: "v1.8.0-Release", asset: { name: "pack.zip" }, prerelease: false };
   assert.equal(pickPackRelease([siteRelease, packRelease]), packRelease);
+});
+
+test("sorts the release feed by publication time", () => {
+  const releases = sortReleasesByDate([
+    { tag: "older", publishedAt: "2026-10-25T11:00:00Z" },
+    { tag: "newer", publishedAt: "2026-10-25T12:00:00Z" }
+  ]);
+  assert.deepEqual(releases.map((release) => release.tag), ["newer", "older"]);
 });
 
 test("serves health and local gun pack data", async (t) => {

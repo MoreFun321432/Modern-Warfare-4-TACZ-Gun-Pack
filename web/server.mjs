@@ -202,6 +202,14 @@ export function pickPackRelease(releases) {
     || null;
 }
 
+export function sortReleasesByDate(releases) {
+  return releases.sort((left, right) => {
+    const leftTime = new Date(left.publishedAt || 0).getTime();
+    const rightTime = new Date(right.publishedAt || 0).getTime();
+    return rightTime - leftTime;
+  });
+}
+
 async function githubRequest(url, token) {
   const headers = {
     Accept: "application/vnd.github+json",
@@ -257,7 +265,9 @@ async function getGitHubData(force = false) {
       }
     : null;
   const releases = releasesResult.status === "fulfilled"
-    ? releasesResult.value.filter((release) => !release.draft).map(normalizeRelease)
+    ? sortReleasesByDate(
+        releasesResult.value.filter((release) => !release.draft).map(normalizeRelease)
+      )
     : [];
   const release = pickPackRelease(releases);
   const errors = [repoResult, releasesResult]

@@ -61,6 +61,14 @@ export function pickPackRelease(releases) {
     || null;
 }
 
+export function sortReleasesByDate(releases) {
+  return releases.sort((left, right) => {
+    const leftTime = new Date(left.publishedAt || 0).getTime();
+    const rightTime = new Date(right.publishedAt || 0).getTime();
+    return rightTime - leftTime;
+  });
+}
+
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -79,9 +87,9 @@ export async function loadReleases() {
       });
       const releases = Array.isArray(payload) ? payload : payload.releases;
       if (Array.isArray(releases)) {
-        return releases
+        return sortReleasesByDate(releases
           .filter((release) => !release.draft)
-          .map(normalizeRelease);
+          .map(normalizeRelease));
       }
     } catch (error) {
       console.info(`Release source unavailable: ${source}`, error.message);
