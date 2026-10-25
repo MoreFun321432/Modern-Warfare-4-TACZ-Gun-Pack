@@ -629,6 +629,229 @@ main {
   white-space: nowrap;
 }
 
+.update-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.update-card {
+  display: flex;
+  min-height: 255px;
+  padding: 24px;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(155deg, rgba(199, 243, 107, 0.045), transparent 42%),
+    rgba(255, 255, 255, 0.012);
+}
+
+.update-meta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--dim);
+  font: 10px "Cascadia Code", Consolas, monospace;
+}
+
+.update-version {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 8px;
+  color: var(--acid);
+  border: 1px solid rgba(199, 243, 107, 0.32);
+  background: rgba(199, 243, 107, 0.055);
+  font: 10px "Cascadia Code", Consolas, monospace;
+  letter-spacing: 0.05em;
+}
+
+.update-card h3 {
+  margin: 54px 0 12px;
+  font-size: 21px;
+}
+
+.update-card p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  line-height: 1.7;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.update-link {
+  width: fit-content;
+  margin-top: auto;
+  padding-top: 26px;
+  color: var(--acid);
+  border-bottom: 1px solid rgba(199, 243, 107, 0.38);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.updates-more {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+.log-hero {
+  max-width: 980px;
+  padding: clamp(90px, 12vw, 170px) clamp(22px, 5vw, 72px) 64px;
+}
+
+.log-hero h1 {
+  margin: 0;
+  font-size: clamp(60px, 10vw, 142px);
+  line-height: 0.86;
+  letter-spacing: -0.07em;
+}
+
+.log-hero > p:not(.eyebrow) {
+  max-width: 720px;
+  margin: 32px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.log-toolbar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin-top: 38px;
+  padding-top: 22px;
+  color: var(--acid);
+  border-top: 1px solid var(--line);
+  font: 11px "Cascadia Code", Consolas, monospace;
+  letter-spacing: 0.12em;
+}
+
+.changelog-list {
+  display: grid;
+  gap: 22px;
+  padding: 0 clamp(22px, 5vw, 72px) clamp(90px, 10vw, 150px);
+}
+
+.release-entry {
+  scroll-margin-top: 100px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(125deg, rgba(199, 243, 107, 0.055), transparent 24%),
+    var(--panel);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+.release-entry-header {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(24px, 4vw, 42px);
+  border-bottom: 1px solid var(--line);
+}
+
+.release-entry-header h2 {
+  margin: 18px 0 10px;
+  font-size: clamp(25px, 3vw, 42px);
+  letter-spacing: -0.035em;
+}
+
+.release-entry-header time {
+  color: var(--dim);
+  font: 11px "Cascadia Code", Consolas, monospace;
+}
+
+.release-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.release-facts {
+  padding: 13px clamp(24px, 4vw, 42px);
+  color: var(--dim);
+  border-bottom: 1px solid var(--line);
+  font: 10px "Cascadia Code", Consolas, monospace;
+  overflow-wrap: anywhere;
+}
+
+.release-notes {
+  max-width: 960px;
+  padding: clamp(26px, 4vw, 48px);
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.release-notes h2,
+.release-notes h3,
+.release-notes h4 {
+  margin: 30px 0 13px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.release-notes h2:first-child,
+.release-notes h3:first-child,
+.release-notes h4:first-child {
+  margin-top: 0;
+}
+
+.release-notes h3 {
+  font-size: 23px;
+}
+
+.release-notes h4 {
+  color: var(--acid);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+
+.release-notes p,
+.release-notes ul {
+  margin: 0 0 16px;
+}
+
+.release-notes ul {
+  padding-left: 21px;
+}
+
+.release-notes li + li {
+  margin-top: 8px;
+}
+
+.release-notes strong {
+  color: var(--ink);
+}
+
+.release-notes a {
+  color: var(--acid);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.release-notes blockquote {
+  margin: 20px 0;
+  padding: 12px 18px;
+  color: var(--muted);
+  border-left: 2px solid var(--acid);
+  background: rgba(199, 243, 107, 0.035);
+}
+
+.log-empty {
+  padding: 80px 24px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
 footer {
   display: flex;
   gap: 24px;
@@ -661,6 +884,14 @@ footer a {
 
   .repository-panel {
     grid-template-columns: 1fr;
+  }
+
+  .update-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .release-entry-header {
+    align-items: flex-start;
   }
 }
 
@@ -742,6 +973,27 @@ footer a {
 
   .steps h3 {
     margin-top: 30px;
+  }
+
+  .update-card {
+    min-height: 220px;
+  }
+
+  .update-card h3 {
+    margin-top: 36px;
+  }
+
+  .log-toolbar,
+  .release-entry-header {
+    display: grid;
+  }
+
+  .release-actions {
+    justify-content: flex-start;
+  }
+
+  .updates-more {
+    justify-content: flex-start;
   }
 
   footer {

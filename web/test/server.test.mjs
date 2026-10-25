@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { createAppServer, readGunPackManifest } from "../server.mjs";
+import { createAppServer, normalizeRelease, readGunPackManifest } from "../server.mjs";
 import { toStaticManifest } from "../scripts/build-static.mjs";
+import { extractReleaseSummary, normalizeRelease as normalizeClientRelease } from "../public/release-data.js";
 
 test("reads the live gun pack manifest", async () => {
   const manifest = await readGunPackManifest();
@@ -18,6 +19,29 @@ test("creates file-based icon URLs for static hosting", async () => {
   const staticManifest = toStaticManifest(manifest);
   assert.ok(staticManifest.guns.every((gun) => gun.iconUrl.endsWith(".png")));
   assert.equal(manifest.guns[0].iconUrl.includes(".png"), false);
+});
+
+test("keeps release notes and zip metadata in the release feed", () => {
+  const release = normalizeRelease({
+    tag_name: "v1.8.1-Release",
+    name: "Hotfix",
+    html_url: "https://github.com/example/releases/tag/v1.8.1-Release",
+    published_at: "2026-10-25T12:00:00Z",
+    body: "## Bug 修复\n\n- 修复换弹音效",
+    assets: [{
+      name: "Modern.Warfare.4-1.8.1-Release.zip",
+      size: 26229060,
+      download_count: 3,
+      updated_at: "2026-10-25T12:00:00Z",
+      browser_download_url: "https://github.com/example/release.zip"
+    }]
+  });
+
+  assert.equal(release.tag, "v1.8.1-Release");
+  assert.match(release.body, /换弹音效/);
+  assert.equal(release.asset.size, 26229060);
+  assert.equal(extractReleaseSummary(release.body), "修复换弹音效");
+  assert.equal(normalizeClientRelease(release), release);
 });
 
 test("serves health and local gun pack data", async (t) => {
@@ -45,5 +69,9 @@ test("serves health and local gun pack data", async (t) => {
   const pageResponse = await fetch(baseUrl);
   assert.equal(pageResponse.status, 200);
   assert.match(await pageResponse.text(), /Modern Warfare 4/);
+
+  const changelogResponse = await fetch(`${baseUrl}/changelog.html`);
+  assert.equal(changelogResponse.status, 200);
+  assert.match(await changelogResponse.text(), /更新日志/);
 });
 

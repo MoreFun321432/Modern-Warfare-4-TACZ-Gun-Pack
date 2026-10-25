@@ -12,7 +12,7 @@
   <body>
     <div class="noise" aria-hidden="true"></div>
     <header class="topbar">
-      <a class="brand" href="/" aria-label="Modern Warfare 4 首页">
+      <a class="brand" href="./" aria-label="Modern Warfare 4 首页">
         <span class="brand-mark">MW</span>
         <span class="brand-copy">
           <strong>MODERN WARFARE 4</strong>
@@ -21,6 +21,8 @@
       </a>
       <nav aria-label="导航">
         <a href="#arsenal">军械库</a>
+        <a href="#updates">最近更新</a>
+        <a href="./changelog.html">更新日志</a>
         <a href="#install">安装</a>
         <a id="repo-nav-link" href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack" rel="noreferrer">GitHub ↗</a>
       </nav>
@@ -110,6 +112,22 @@
         </div>
       </section>
 
+      <section class="section updates" id="updates">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">RECENT PATCHES</p>
+            <h2>更新与日志</h2>
+          </div>
+          <p>默认展示最近三次 Release。bug 修复、版本内容与下载信息均从 GitHub 发布记录同步。</p>
+        </div>
+        <div class="update-grid" id="recent-releases" aria-live="polite">
+          <div class="loading-panel">正在载入最近更新…</div>
+        </div>
+        <div class="updates-more">
+          <a class="button button-outline" href="./changelog.html">查看完整更新日志 ↗</a>
+        </div>
+      </section>
+
       <section class="section intel" id="install">
         <div class="section-heading">
           <div>
@@ -163,7 +181,7 @@
       <span>枪包 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/GUNPACK-LICENSE.md" rel="noreferrer">GPL-3.0</a> · 网站代码与文档 <a href="https://github.com/MoreFun321432/Modern-Warfare-4-TACZ-Gun-Pack/blob/main/LICENSE" rel="noreferrer">MIT</a></span>
     </footer>
 
-    <script src="./app.js" type="module"></script>
+    <script src="./app.js?v=20261025-1" type="module"></script>
   </body>
 </html>
 

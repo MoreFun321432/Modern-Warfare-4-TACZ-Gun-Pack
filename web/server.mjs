@@ -25,8 +25,11 @@ const GITHUB_CACHE_MS = 5 * 60_000;
 const staticFiles = new Map([
   ["/", { file: "index.html", type: "text/html; charset=utf-8" }],
   ["/index.html", { file: "index.html", type: "text/html; charset=utf-8" }],
+  ["/changelog.html", { file: "changelog.html", type: "text/html; charset=utf-8" }],
   ["/styles.css", { file: "styles.css", type: "text/css; charset=utf-8" }],
-  ["/app.js", { file: "app.js", type: "text/javascript; charset=utf-8" }]
+  ["/app.js", { file: "app.js", type: "text/javascript; charset=utf-8" }],
+  ["/changelog.js", { file: "changelog.js", type: "text/javascript; charset=utf-8" }],
+  ["/release-data.js", { file: "release-data.js", type: "text/javascript; charset=utf-8" }]
 ]);
 
 const mimeTypes = new Map([
@@ -169,7 +172,7 @@ async function getGunPackManifest() {
   return cache.gunpack;
 }
 
-function normalizeRelease(release) {
+export function normalizeRelease(release) {
   if (!release) return null;
   const zipAsset = (release.assets || []).find((asset) => /\.zip$/i.test(asset.name));
   return {
@@ -177,6 +180,8 @@ function normalizeRelease(release) {
     name: release.name || release.tag_name,
     url: release.html_url,
     publishedAt: release.published_at,
+    body: release.body || "",
+    prerelease: Boolean(release.prerelease),
     downloadUrl: zipAsset?.browser_download_url || release.html_url,
     asset: zipAsset
       ? {
@@ -223,9 +228,9 @@ async function getGitHubData(force = false) {
 
   const apiBase = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
   const token = process.env.GITHUB_TOKEN;
-  const [repoResult, releaseResult] = await Promise.allSettled([
+  const [repoResult, releasesResult] = await Promise.allSettled([
     githubRequest(apiBase, token),
-    githubRequest(`${apiBase}/releases/latest`, token)
+    githubRequest(`${apiBase}/releases?per_page=30`, token)
   ]);
 
   const repository = repoResult.status === "fulfilled"
@@ -243,16 +248,15 @@ async function getGitHubData(force = false) {
         pushedAt: repoResult.value.pushed_at
       }
     : null;
-  const release = releaseResult.status === "fulfilled" ? normalizeRelease(releaseResult.value) : null;
-  const errors = [repoResult, releaseResult]
-    .filter((result, index) => {
-      if (result.status !== "rejected") return false;
-      // GitHub returns 404 from /releases/latest until the first release is published.
-      return !(index === 1 && result.reason?.status === 404);
-    })
+  const releases = releasesResult.status === "fulfilled"
+    ? releasesResult.value.filter((release) => !release.draft).map(normalizeRelease)
+    : [];
+  const release = releases.find((item) => !item.prerelease) || releases[0] || null;
+  const errors = [repoResult, releasesResult]
+    .filter((result) => result.status === "rejected")
     .map((result) => result.reason?.message || "GitHub request failed");
 
-  cache.github = { repository, release };
+  cache.github = { repository, release, releases };
   cache.githubAt = now;
   cache.githubError = errors.length ? errors.join("; ") : null;
   return { data: cache.github, error: cache.githubError };
@@ -346,6 +350,16 @@ async function handleRequest(request, response) {
       ? `https://github.akams.cn/?url=${encodeURIComponent(location)}`
       : location;
     redirect(response, accelerated);
+    return;
+  }
+
+  if (url.pathname === "/api/releases") {
+    const github = await getGitHubData(url.searchParams.get("refresh") === "1");
+    sendJson(response, 200, {
+      releases: github.data?.releases || [],
+      error: github.error,
+      refreshedAt: new Date().toISOString()
+    }, "public, max-age=60");
     return;
   }
 

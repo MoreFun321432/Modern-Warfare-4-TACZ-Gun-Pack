@@ -1,3 +1,5 @@
+import { createHomeReleaseCard, loadReleases } from "./release-data.js?v=20261025-1";
+
 const elements = {
   packVersion: document.querySelector("#pack-version"),
   gunCount: document.querySelector("#gun-count"),
@@ -12,6 +14,7 @@ const elements = {
   assetSize: document.querySelector("#asset-size"),
   downloadAccelerated: document.querySelector("#download-accelerated"),
   downloadDirect: document.querySelector("#download-direct"),
+  recentReleases: document.querySelector("#recent-releases"),
   repoLinks: [
     document.querySelector("#repo-nav-link"),
     document.querySelector("#repo-panel-link")
@@ -231,5 +234,31 @@ async function loadStatus() {
   }
 }
 
+async function loadRecentReleases() {
+  try {
+    const releases = await loadReleases();
+    elements.recentReleases.replaceChildren();
+    if (releases.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "loading-panel";
+      empty.textContent = "暂时没有可展示的 Release 更新。";
+      elements.recentReleases.append(empty);
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    releases.slice(0, 3).forEach((release) => fragment.append(createHomeReleaseCard(release)));
+    elements.recentReleases.append(fragment);
+  } catch (error) {
+    console.error(error);
+    elements.recentReleases.replaceChildren();
+    const panel = document.createElement("div");
+    panel.className = "loading-panel";
+    panel.textContent = "更新日志暂时无法载入，请稍后重试。";
+    elements.recentReleases.append(panel);
+  }
+}
+
 applyDownloadLinks(latestReleaseUrl);
 loadStatus();
+loadRecentReleases();

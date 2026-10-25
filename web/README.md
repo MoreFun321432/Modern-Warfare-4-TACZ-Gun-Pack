@@ -7,7 +7,9 @@ It has no third-party runtime dependencies.
 The public static build is published by GitHub Pages at:
 <https://morefun321432.github.io/Modern-Warfare-4-TACZ-Gun-Pack/>.
 It falls back to the GitHub API and a generated `api/gunpack.json` when the
-Node.js backend is not running.
+Node.js backend is not running. GitHub Pages also receives a generated
+`api/releases.json` snapshot for the home-page recent updates and the full
+`changelog.html` history.
 
 The gun pack content follows TACZ's GPL-3.0 license. This website's source
 code and documentation are licensed separately under MIT.
@@ -30,6 +32,7 @@ Endpoints:
 
 - `GET /api/status`: gun pack, repository and latest release status.
 - `GET /api/gunpack`: local gun pack manifest.
+- `GET /api/releases`: up to 30 GitHub Releases with notes and asset metadata.
 - `GET /api/download`: redirects to the latest release zip.
 - `GET /api/download?accelerated=1`: redirects through `github.akams.cn`.
 - `GET /api/icons/:id`: serves a gun icon from the pack.
