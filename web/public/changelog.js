@@ -2,10 +2,10 @@ import {
   acceleratedReleaseUrl,
   formatReleaseBytes,
   formatReleaseDate,
-  loadReleases,
+  loadPackReleases,
   releaseAnchor,
   renderReleaseNotes
-} from "./release-data.js?v=20261025-4";
+} from "./release-data.js?v=20261025-5";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");
@@ -68,7 +68,7 @@ function createReleaseEntry(release) {
 
 async function renderChangelog() {
   try {
-    const releases = await loadReleases();
+    const releases = await loadPackReleases();
     count.textContent = `${releases.length} 个版本`;
     list.replaceChildren();
     if (releases.length === 0) {

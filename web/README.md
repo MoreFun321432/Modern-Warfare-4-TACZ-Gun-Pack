@@ -11,6 +11,9 @@ Node.js backend is not running. GitHub Pages also receives a generated
 `api/releases.json` snapshot for the home-page recent updates and the full
 `changelog.html` history.
 
+Website-only `website-*` Releases are isolated on `website-updates.html`.
+They never appear in the gun-pack changelog and have no download action.
+
 The gun pack content follows TACZ's GPL-3.0 license. This website's source
 code and documentation are licensed separately under MIT.
 

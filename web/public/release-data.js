@@ -69,6 +69,14 @@ export function sortReleasesByDate(releases) {
   });
 }
 
+export function isWebsiteRelease(release) {
+  return /^(?:website|web|site)-/i.test(release?.tag || "");
+}
+
+export function isPackRelease(release) {
+  return Boolean(release?.asset) && !isWebsiteRelease(release);
+}
+
 async function fetchJson(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -97,6 +105,14 @@ export async function loadReleases() {
   }
 
   return [];
+}
+
+export async function loadPackReleases() {
+  return (await loadReleases()).filter(isPackRelease);
+}
+
+export async function loadWebsiteReleases() {
+  return (await loadReleases()).filter(isWebsiteRelease);
 }
 
 function appendInlineContent(container, text) {

@@ -43,3 +43,12 @@ This policy applies to every update pushed to
 - There is no automatic GitHub Release workflow. Pushing code and publishing a
   version are deliberate, separately verified operations.
 
+## Website updates
+
+- Website-only Releases use a `website-*` tag and are listed on the separate
+  `website-updates.html` page.
+- Website Releases must not appear in the gun-pack update cards or gun-pack
+  changelog.
+- Website Releases have no download action. Their only external action is a link
+  to the GitHub Release notes.
+

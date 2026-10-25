@@ -9,7 +9,12 @@ import {
   sortReleasesByDate
 } from "../server.mjs";
 import { toStaticManifest } from "../scripts/build-static.mjs";
-import { extractReleaseSummary, normalizeRelease as normalizeClientRelease } from "../public/release-data.js";
+import {
+  extractReleaseSummary,
+  isPackRelease,
+  isWebsiteRelease,
+  normalizeRelease as normalizeClientRelease
+} from "../public/release-data.js";
 
 test("reads the live gun pack manifest", async () => {
   const manifest = await readGunPackManifest();
@@ -64,6 +69,15 @@ test("sorts the release feed by publication time", () => {
   assert.deepEqual(releases.map((release) => release.tag), ["newer", "older"]);
 });
 
+test("separates website releases from downloadable gun-pack releases", () => {
+  const website = { tag: "website-v1.0.0", asset: null };
+  const pack = { tag: "v1.8.1-Release", asset: { name: "pack.zip" } };
+  assert.equal(isWebsiteRelease(website), true);
+  assert.equal(isPackRelease(website), false);
+  assert.equal(isWebsiteRelease(pack), false);
+  assert.equal(isPackRelease(pack), true);
+});
+
 test("serves health and local gun pack data", async (t) => {
   const server = createAppServer();
   server.listen(0, "127.0.0.1");
@@ -93,5 +107,9 @@ test("serves health and local gun pack data", async (t) => {
   const changelogResponse = await fetch(`${baseUrl}/changelog.html`);
   assert.equal(changelogResponse.status, 200);
   assert.match(await changelogResponse.text(), /更新日志/);
+
+  const websiteUpdatesResponse = await fetch(`${baseUrl}/website-updates.html`);
+  assert.equal(websiteUpdatesResponse.status, 200);
+  assert.match(await websiteUpdatesResponse.text(), /网页更新/);
 });
 

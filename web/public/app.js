@@ -1,4 +1,9 @@
-import { createHomeReleaseCard, loadReleases, pickPackRelease } from "./release-data.js?v=20261025-4";
+import {
+  createHomeReleaseCard,
+  loadPackReleases,
+  loadReleases,
+  pickPackRelease
+} from "./release-data.js?v=20261025-5";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),
@@ -217,7 +222,7 @@ async function loadStatus() {
 
 async function loadRecentReleases() {
   try {
-    const releases = await loadReleases();
+    const releases = await loadPackReleases();
     elements.recentReleases.replaceChildren();
     if (releases.length === 0) {
       const empty = document.createElement("div");

@@ -719,6 +719,28 @@ main {
   line-height: 1.8;
 }
 
+.website-log-hero .eyebrow,
+.website-release-entry .update-version {
+  color: var(--orange);
+}
+
+.website-log-hero .eyebrow .pulse {
+  background: var(--orange);
+  box-shadow: 0 0 0 5px rgba(255, 138, 61, 0.08);
+}
+
+.website-release-entry {
+  border-color: rgba(255, 138, 61, 0.22);
+  background:
+    linear-gradient(125deg, rgba(255, 138, 61, 0.055), transparent 24%),
+    var(--panel);
+}
+
+.website-release-entry .update-version {
+  border-color: rgba(255, 138, 61, 0.34);
+  background: rgba(255, 138, 61, 0.06);
+}
+
 .log-toolbar {
   display: flex;
   gap: 20px;
