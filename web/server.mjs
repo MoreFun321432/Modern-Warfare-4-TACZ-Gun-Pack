@@ -36,6 +36,7 @@ const staticFiles = new Map([
   ["/website-update.js", { file: "website-update.js", type: "text/javascript; charset=utf-8" }],
   ["/website-update-redirect.js", { file: "website-update-redirect.js", type: "text/javascript; charset=utf-8" }],
   ["/website-update-data.js", { file: "website-update-data.js", type: "text/javascript; charset=utf-8" }],
+  ["/download-config.js", { file: "download-config.js", type: "text/javascript; charset=utf-8" }],
   ["/release-data.js", { file: "release-data.js", type: "text/javascript; charset=utf-8" }]
 ]);
 

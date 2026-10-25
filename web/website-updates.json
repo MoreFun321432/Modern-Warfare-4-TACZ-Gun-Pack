@@ -1,6 +1,22 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.25",
+      "title": "新增下载节点自动测速",
+      "publishedAt": "2026-10-25T15:16:17Z",
+      "summary": "构建时自动测试候选加速节点，筛选最快稳定线路并统一转换主站所有下载链接。",
+      "changes": [
+        "新增 web/download-mirrors.json 候选节点列表。",
+        "构建时对当前枪包 zip 执行 Range 请求测速，拒绝重置、超时和 HTML 响应。",
+        "生成 api/download-config.json，供主页和枪包更新日志共同读取。",
+        "GitHub Release 和每 5 分钟定时构建会重新测速当前最新版本。"
+      ],
+      "bugFixes": [
+        "修复加速站点自动匹配到故障节点后出现连接重置的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.24",
       "title": "修复加速下载节点重置",
       "publishedAt": "2026-10-25T15:13:27Z",

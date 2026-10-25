@@ -22,8 +22,8 @@ export function formatReleaseBytes(value) {
   return `${value} B`;
 }
 
-export function acceleratedReleaseUrl(url) {
-  return `https://gh-proxy.com/${url}`;
+export function acceleratedReleaseUrl(url, prefix = "https://gh-proxy.com/") {
+  return `${prefix}${url}`;
 }
 
 export function releaseAnchor(tag) {

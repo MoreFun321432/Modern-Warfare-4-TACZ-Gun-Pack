@@ -52,6 +52,12 @@ Endpoints:
 - `GET /api/icons/:id`: serves a gun icon from the pack.
 - `GET /healthz`: health check.
 
+The static build tests `web/download-mirrors.json`, rejects reset/timeout and
+unexpected HTML responses, and writes `api/download-config.json` with the
+fastest working mirror for the latest pack asset. Home-page and changelog
+download links read that generated config, so future releases are converted
+automatically.
+
 Run the tests with:
 
 ```powershell

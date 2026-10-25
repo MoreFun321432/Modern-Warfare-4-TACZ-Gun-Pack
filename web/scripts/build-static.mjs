@@ -13,6 +13,11 @@ const webDir = resolve(scriptDir, "..");
 const projectRoot = resolve(webDir, "..");
 const repositoryOwner = process.env.GITHUB_OWNER || "Skydeps1459";
 const repositoryName = process.env.GITHUB_REPO || "Modern-Warfare-4-TACZ-GunPack";
+const DEFAULT_MIRROR = {
+  id: "gh-proxy",
+  name: "gh-proxy.com",
+  prefix: "https://gh-proxy.com/"
+};
 
 export async function fetchStaticReleases({
   owner = repositoryOwner,
@@ -95,6 +100,81 @@ export function toDetailPage(template, updateId) {
   return template.replaceAll("{{UPDATE_ID}}", updateId);
 }
 
+export async function probeDownloadMirror(mirror, downloadUrl, timeoutMs = 9_000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const startedAt = performance.now();
+  try {
+    const response = await fetch(`${mirror.prefix}${downloadUrl}`, {
+      headers: { Range: "bytes=0-65535" },
+      redirect: "follow",
+      signal: controller.signal
+    });
+    const contentType = response.headers.get("content-type") || "";
+    if (![200, 206].includes(response.status)) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    if (/text\/html|application\/json/i.test(contentType)) {
+      throw new Error(`Unexpected content type: ${contentType}`);
+    }
+
+    const reader = response.body?.getReader();
+    const firstChunk = reader ? await reader.read() : { value: null, done: true };
+    await reader?.cancel();
+    const bytes = firstChunk.value?.byteLength || 0;
+    if (bytes === 0) throw new Error("Empty response");
+
+    return {
+      ...mirror,
+      ok: true,
+      status: response.status,
+      latencyMs: Math.round(performance.now() - startedAt),
+      bytes
+    };
+  } catch (error) {
+    return {
+      ...mirror,
+      ok: false,
+      latencyMs: Math.round(performance.now() - startedAt),
+      error: error.name === "AbortError" ? "timeout" : error.message
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+export async function buildDownloadConfig(downloadUrl, mirrors) {
+  if (!downloadUrl) {
+    return {
+      generatedAt: new Date().toISOString(),
+      directUrl: null,
+      selected: DEFAULT_MIRROR,
+      fallback: null,
+      acceleratedUrl: null,
+      probes: []
+    };
+  }
+
+  const probes = await Promise.all(
+    mirrors.map((mirror) => probeDownloadMirror(mirror, downloadUrl))
+  );
+  const working = probes
+    .filter((probe) => probe.ok)
+    .sort((left, right) => left.latencyMs - right.latencyMs);
+  const selected = working[0] || DEFAULT_MIRROR;
+  const fallback = working[1] || null;
+
+  return {
+    generatedAt: new Date().toISOString(),
+    directUrl: downloadUrl,
+    selected,
+    fallback,
+    acceleratedUrl: `${selected.prefix}${downloadUrl}`,
+    excludedHosts: ["gh.my-website.ccwu.cc"],
+    probes
+  };
+}
+
 export async function buildStaticSite() {
   const publicDir = join(webDir, "public");
   const distDir = join(webDir, "dist");
@@ -112,15 +192,28 @@ export async function buildStaticSite() {
     }
   }
 
-  const [manifest, releases, repository] = await Promise.all([
+  const [manifest, releases, repository, mirrorConfig] = await Promise.all([
     readGunPackManifest(),
     fetchStaticReleases(),
-    fetchStaticRepository()
+    fetchStaticRepository(),
+    readFile(join(webDir, "download-mirrors.json"), "utf8").then(JSON.parse)
   ]);
+  const packRelease = releases.find((release) =>
+    release.asset && !/^website-/i.test(release.tag)
+  );
+  const downloadConfig = await buildDownloadConfig(
+    packRelease?.downloadUrl || null,
+    mirrorConfig.mirrors || []
+  );
   const staticManifest = toStaticManifest(manifest);
   await writeFile(join(distDir, "api", "gunpack.json"), `${JSON.stringify(staticManifest, null, 2)}\n`, "utf8");
   await writeFile(join(distDir, "api", "releases.json"), `${JSON.stringify(releases, null, 2)}\n`, "utf8");
   await writeFile(join(distDir, "api", "repository.json"), `${JSON.stringify(repository, null, 2)}\n`, "utf8");
+  await writeFile(
+    join(distDir, "api", "download-config.json"),
+    `${JSON.stringify(downloadConfig, null, 2)}\n`,
+    "utf8"
+  );
   await cp(join(webDir, "website-updates.json"), join(distDir, "api", "website-updates.json"));
 
   const [detailTemplate, websiteUpdates] = await Promise.all([
@@ -146,6 +239,10 @@ export async function buildStaticSite() {
   console.log(
     `Built static site: ${manifest.version}, ${manifest.guns.length} guns, ` +
       `${releases.length} releases, ${websiteUpdates.length} website detail pages`
+  );
+  console.log(
+    `Download accelerator: ${downloadConfig.selected.name} ` +
+      `(${downloadConfig.selected.latencyMs == null ? "fallback" : `${downloadConfig.selected.latencyMs} ms`})`
   );
   return staticManifest;
 }

@@ -12,8 +12,8 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 
 在线网页：<https://skydeps1459.github.io/Modern-Warfare-4-TACZ-GunPack/>
 
-下载按钮默认使用已验证的 `https://gh-proxy.com` 加速节点，同时保留 GitHub
-Release 原链。
+下载按钮会在每次构建时自动测速候选节点，选择当前最快且稳定的加速线路，并把
+转换后的主包下载地址写入全站。GitHub Release 原链保留为备用。
 
 > Lite 包已冻结，本仓库只维护主包 `Modern Warfare 4`。仓库中的网页、API 和
 > GitHub 工作流不会被打进 TACZ 枪包 zip。
@@ -64,7 +64,7 @@ Release 原链。
   并在主页底部展示最近 3 条；不进入枪包日志，也不提供网站文件下载。
 - 网页打开时每 5 分钟自动刷新数据，GitHub Pages 每 5 分钟重建静态快照。
 - 提供枪包清单 API、图标 API 和最新版本下载跳转。
-- 主下载按钮使用 `gh-proxy.com` 加速，GitHub 原链保留为备用。
+- 主下载按钮使用构建时自动筛选的最快稳定节点，GitHub 原链保留为备用。
 - 包含响应式中文展示页、健康检查、自动化测试和 Dockerfile。
 
 从仓库根目录启动：

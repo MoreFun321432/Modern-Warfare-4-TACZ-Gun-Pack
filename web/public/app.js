@@ -3,11 +3,15 @@ import {
   loadPackReleases,
   loadReleases,
   pickPackRelease
-} from "./release-data.js?v=20261025-7";
+} from "./release-data.js?v=20261025-8";
 import {
   createHomepageWebsiteUpdate,
   loadWebsiteUpdates
 } from "./website-update-data.js?v=20261025-6";
+import {
+  accelerateDownloadUrl,
+  loadDownloadConfig
+} from "./download-config.js?v=20261025-1";
 
 const elements = {
   packVersion: document.querySelector("#pack-version"),
@@ -38,7 +42,8 @@ const repositoryConfig = {
 
 const repositoryUrl = `https://github.com/${repositoryConfig.owner}/${repositoryConfig.repo}`;
 const releasesUrl = `${repositoryUrl}/releases`;
-const acceleratedDownloadUrl = (url) => `https://gh-proxy.com/${url}`;
+let acceleratorPrefix = "https://gh-proxy.com/";
+let currentDownloadUrl = null;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
@@ -69,8 +74,15 @@ function applyRepositoryLinks(url) {
 
 function applyDownloadLinks(url) {
   const target = url || releasesUrl;
-  elements.downloadAccelerated.href = acceleratedDownloadUrl(target);
+  currentDownloadUrl = target;
+  elements.downloadAccelerated.href = accelerateDownloadUrl(target, acceleratorPrefix);
   elements.downloadDirect.href = target;
+}
+
+async function refreshDownloadAccelerator() {
+  const config = await loadDownloadConfig();
+  acceleratorPrefix = config.selected.prefix;
+  if (currentDownloadUrl) applyDownloadLinks(currentDownloadUrl);
 }
 
 function createGunCard(gun, index) {
@@ -291,7 +303,8 @@ async function refreshPublicData() {
     await Promise.allSettled([
       loadStatus(),
       loadRecentReleases(),
-      loadHomepageWebsiteUpdates()
+      loadHomepageWebsiteUpdates(),
+      refreshDownloadAccelerator()
     ]);
     lastRefreshAt = Date.now();
   } finally {

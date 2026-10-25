@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
+import { readFile } from "node:fs/promises";
 import {
   createAppServer,
   normalizeRelease,
@@ -83,8 +84,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 24);
-  assert.equal(updates[0].id, "website-v1.0.24");
+  assert.ok(updates.length >= 25);
+  assert.equal(updates[0].id, "website-v1.0.25");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -106,6 +107,24 @@ test("uses the verified gh-proxy accelerator", () => {
   assert.equal(
     acceleratedReleaseUrl("https://github.com/example/release.zip"),
     "https://gh-proxy.com/https://github.com/example/release.zip"
+  );
+});
+
+test("supports the build-selected accelerator prefix", () => {
+  assert.equal(
+    acceleratedReleaseUrl("https://github.com/example/release.zip", "https://mirror.example/"),
+    "https://mirror.example/https://github.com/example/release.zip"
+  );
+});
+
+test("excludes the known resetting mirror host", async () => {
+  const mirrorConfig = JSON.parse(
+    await readFile(new URL("../download-mirrors.json", import.meta.url), "utf8")
+  );
+  assert.ok(mirrorConfig.excludedHosts.includes("gh.my-website.ccwu.cc"));
+  assert.equal(
+    mirrorConfig.mirrors.some((mirror) => mirror.prefix.includes("gh.my-website.ccwu.cc")),
+    false
   );
 });
 

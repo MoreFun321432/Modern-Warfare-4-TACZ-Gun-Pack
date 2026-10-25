@@ -5,13 +5,14 @@ import {
   loadPackReleases,
   releaseAnchor,
   renderReleaseNotes
-} from "./release-data.js?v=20261025-7";
+} from "./release-data.js?v=20261025-8";
+import { loadDownloadConfig } from "./download-config.js?v=20261025-1";
 
 const list = document.querySelector("#changelog-list");
 const count = document.querySelector("#release-count");
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
 
-function createReleaseEntry(release) {
+function createReleaseEntry(release, acceleratorPrefix) {
   const article = document.createElement("article");
   article.className = "release-entry";
   article.id = releaseAnchor(release.tag);
@@ -34,7 +35,7 @@ function createReleaseEntry(release) {
   if (release.asset) {
     const accelerated = document.createElement("a");
     accelerated.className = "button button-primary";
-    accelerated.href = acceleratedReleaseUrl(release.downloadUrl);
+    accelerated.href = acceleratedReleaseUrl(release.downloadUrl, acceleratorPrefix);
     accelerated.rel = "noreferrer";
     accelerated.textContent = "加速下载";
     actions.append(accelerated);
@@ -83,7 +84,10 @@ function scrollToCurrentHash() {
 
 async function renderChangelog() {
   try {
-    const releases = await loadPackReleases();
+    const [releases, downloadConfig] = await Promise.all([
+      loadPackReleases(),
+      loadDownloadConfig()
+    ]);
     count.textContent = `${releases.length} 个版本`;
     list.replaceChildren();
     if (releases.length === 0) {
@@ -95,7 +99,9 @@ async function renderChangelog() {
     }
 
     const fragment = document.createDocumentFragment();
-    releases.forEach((release) => fragment.append(createReleaseEntry(release)));
+    releases.forEach((release) =>
+      fragment.append(createReleaseEntry(release, downloadConfig.selected.prefix))
+    );
     list.append(fragment);
 
     scrollToCurrentHash();
