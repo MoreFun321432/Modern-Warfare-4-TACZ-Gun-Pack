@@ -97,12 +97,12 @@ function scrollToCurrentHash() {
   document.getElementById(targetId)?.scrollIntoView({ block: "start" });
 }
 
-async function renderChangelog() {
+async function renderChangelog({ preferLive = false } = {}) {
   try {
     const [releases, downloadConfig, domesticMirror] = await Promise.all([
       loadPackReleases(),
       loadDownloadConfig(),
-      loadDomesticMirror()
+      loadDomesticMirror(undefined, { preferLive })
     ]);
     count.textContent = `${releases.length} 个版本`;
     list.replaceChildren();
@@ -140,11 +140,11 @@ async function renderChangelog() {
 
 let refreshInFlight = false;
 
-async function refreshChangelog() {
+async function refreshChangelog({ preferLive = false } = {}) {
   if (refreshInFlight || document.visibilityState === "hidden") return;
   refreshInFlight = true;
   try {
-    await renderChangelog();
+    await renderChangelog({ preferLive });
   } finally {
     refreshInFlight = false;
   }
@@ -153,6 +153,6 @@ async function refreshChangelog() {
 refreshChangelog();
 setInterval(refreshChangelog, AUTO_REFRESH_MS);
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") refreshChangelog();
+  if (document.visibilityState === "visible") refreshChangelog({ preferLive: true });
 });
 

@@ -52,7 +52,10 @@ export async function loadDownloadConfig(baseUrl = new URL("./", document.baseUR
   }
 }
 
-export async function loadDomesticMirror(baseUrl = new URL("./", document.baseURI)) {
+export async function loadDomesticMirror(
+  baseUrl = new URL("./", document.baseURI),
+  { preferLive = false } = {}
+) {
   const siteBase = typeof baseUrl === "string"
     ? new URL(baseUrl, document.baseURI)
     : baseUrl;
@@ -65,13 +68,26 @@ export async function loadDomesticMirror(baseUrl = new URL("./", document.baseUR
   const apiEndpoint = new URL(DOMESTIC_MIRROR_API_URL);
   apiEndpoint.searchParams.set("v", Date.now().toString());
 
-  const sources = [
-    { url: new URL("api/domestic-mirror", siteBase) },
-    { url: liveEndpoint },
-    { url: apiEndpoint, githubContents: true },
-    { url: cdnEndpoint },
-    { url: endpoint }
-  ];
+  // 顺序决定"多久能看到后端的改动"：
+  //   服务端模式（Node）的 /api/domestic-mirror 每次请求都读文件，永远最新；
+  //   静态 Pages 模式下 raw / jsDelivr 都有 CDN 缓存，GitHub Contents API 才是实时的。
+  //   ⇒ 用户回到页面 / 切换标签页时用 preferLive 直接问 GitHub API（即时）；
+  //     后台每 30 秒轮询用静态快照，避免打爆 API 的 60 次/小时限额。
+  const sources = preferLive
+    ? [
+        { url: new URL("api/domestic-mirror", siteBase) },
+        { url: apiEndpoint, githubContents: true },
+        { url: endpoint },
+        { url: liveEndpoint },
+        { url: cdnEndpoint }
+      ]
+    : [
+        { url: new URL("api/domestic-mirror", siteBase) },
+        { url: endpoint },
+        { url: liveEndpoint },
+        { url: apiEndpoint, githubContents: true },
+        { url: cdnEndpoint }
+      ];
   for (const source of sources) {
     try {
       const response = await fetch(source.url, {

@@ -90,16 +90,29 @@ async function refreshDownloadAccelerator() {
 
 let domesticMirrorInFlight = false;
 let lastDomesticMirrorAt = 0;
+let lastDomesticMirrorKey = null;
+let lastLiveMirrorAt = 0;
+const MIRROR_REFRESH_MS = 30 * 1000;
 
-async function loadDomesticMirrorLink() {
+async function loadDomesticMirrorLink({ preferLive = false } = {}) {
   if (domesticMirrorInFlight) return;
+  // 连续切窗口时别把 GitHub API 的 60 次/小时额度打光
+  if (preferLive) {
+    if (Date.now() - lastLiveMirrorAt < 10_000) preferLive = false;
+    else lastLiveMirrorAt = Date.now();
+  }
   domesticMirrorInFlight = true;
   try {
-    const mirror = await loadDomesticMirror();
+    const mirror = await loadDomesticMirror(undefined, { preferLive });
     if (!mirror) {
       elements.downloadLanzou.hidden = true;
+      lastDomesticMirrorKey = "";
       return;
     }
+    // 内容没变就不动 DOM，避免每 30 秒重建按钮、重复绑定复制事件
+    const key = [mirror.url, mirror.password, mirror.label].join("|");
+    if (key === lastDomesticMirrorKey) return;
+    lastDomesticMirrorKey = key;
     elements.downloadLanzou.href = mirror.url;
     elements.downloadLanzou.textContent = mirror.password
       ? `${mirror.label} · 密码 ${mirror.password}`
@@ -343,13 +356,19 @@ async function refreshPublicData() {
 applyDownloadLinks(releasesUrl);
 refreshPublicData();
 setInterval(refreshPublicData, AUTO_REFRESH_MS);
+// 分流按钮单独高频轮询（30 秒）：后端一改，页面最多半分钟内跟上
+setInterval(() => {
+  if (document.visibilityState === "visible") loadDomesticMirrorLink();
+}, MIRROR_REFRESH_MS);
+window.addEventListener("online", () => loadDomesticMirrorLink({ preferLive: true }));
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState !== "visible") return;
-  if (Date.now() - lastDomesticMirrorAt >= 30_000) loadDomesticMirrorLink();
+  // 回到页面时直接问 GitHub API，拿到的是刚提交的最新值
+  loadDomesticMirrorLink({ preferLive: true });
   if (Date.now() - lastRefreshAt >= AUTO_REFRESH_MS) refreshPublicData();
 });
 window.addEventListener("focus", () => {
-  if (Date.now() - lastDomesticMirrorAt >= 30_000) loadDomesticMirrorLink();
+  loadDomesticMirrorLink({ preferLive: true });
 });
 
 let scrollFrame = 0;
