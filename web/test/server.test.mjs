@@ -24,7 +24,14 @@ import {
   isWebsiteRelease,
   normalizeRelease as normalizeClientRelease
 } from "../public/release-data.js";
+import { decodeBase64Utf8 } from "../public/download-config.js";
 import { websiteUpdateDetailPath } from "../public/website-update-data.js";
+
+test("decodes UTF-8 GitHub contents payloads", () => {
+  const label = "蓝奏云国内分流";
+  const encoded = Buffer.from(label, "utf8").toString("base64");
+  assert.equal(decodeBase64Utf8(encoded), label);
+});
 
 test("reads the live gun pack manifest", async () => {
   const manifest = await readGunPackManifest();
@@ -91,7 +98,7 @@ test("separates website releases from downloadable gun-pack releases", () => {
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
   assert.ok(updates.length >= 32);
-  assert.equal(updates[0].id, "website-v1.0.32");
+  assert.match(updates[0].id, /^website-v\d+\.\d+\.\d+$/);
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });

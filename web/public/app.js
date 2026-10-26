@@ -12,7 +12,7 @@ import {
   accelerateDownloadUrl,
   loadDomesticMirror,
   loadDownloadConfig
-} from "./download-config.js?v=20261025-3";
+} from "./download-config.js?v=20261026-1";
 import { bindDomesticMirrorCopy } from "./domestic-mirror.js?v=20261025-1";
 
 const elements = {

@@ -3,6 +3,12 @@ const DOMESTIC_MIRROR_RAW_URL = "https://raw.githubusercontent.com/Skydeps1459/M
 const DOMESTIC_MIRROR_CDN_URL = "https://cdn.jsdelivr.net/gh/Skydeps1459/Modern-Warfare-4-TACZ-GunPack@main/web/domestic-mirror.json";
 const DOMESTIC_MIRROR_API_URL = "https://api.github.com/repos/Skydeps1459/Modern-Warfare-4-TACZ-GunPack/contents/web/domestic-mirror.json?ref=main";
 
+export function decodeBase64Utf8(value) {
+  const binary = atob(String(value || "").replace(/\s/g, ""));
+  const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
 export function accelerateDownloadUrl(url, prefix = DEFAULT_PREFIX) {
   if (!url) return "";
   return `${prefix}${url}`;
@@ -75,7 +81,7 @@ export async function loadDomesticMirror(baseUrl = new URL("./", document.baseUR
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       let mirror = await response.json();
       if (source.githubContents) {
-        mirror = JSON.parse(atob(String(mirror.content || "").replace(/\s/g, "")));
+        mirror = JSON.parse(decodeBase64Utf8(mirror.content));
       }
       const url = new URL(mirror.url);
       if (!["http:", "https:"].includes(url.protocol)) throw new Error("Invalid URL");
