@@ -223,6 +223,16 @@ test("serves health and local gun pack data", async (t) => {
   assert.equal(dedicatedDetailResponse.status, 200);
   assert.match(await dedicatedDetailResponse.text(), /website-v1\.0\.12/);
 
+  const legacyNestedUpdatesResponse = await fetch(
+    `${baseUrl}/website-updates/website-updates.html?v=20261025-11`,
+    { redirect: "manual" }
+  );
+  assert.equal(legacyNestedUpdatesResponse.status, 302);
+  assert.equal(
+    legacyNestedUpdatesResponse.headers.get("location"),
+    "/website-updates.html?v=20261025-11"
+  );
+
   const websiteUpdateApiResponse = await fetch(`${baseUrl}/api/website-updates`);
   assert.equal(websiteUpdateApiResponse.status, 200);
   const websiteUpdateApi = await websiteUpdateApiResponse.json();

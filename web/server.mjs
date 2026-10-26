@@ -748,6 +748,15 @@ async function handleRequest(request, response) {
     return;
   }
 
+  if (url.pathname === "/website-updates/website-updates.html") {
+    response.writeHead(302, {
+      Location: `/website-updates.html${url.search}`,
+      "Cache-Control": "no-store"
+    });
+    response.end();
+    return;
+  }
+
   const detailMatch = url.pathname.match(/^\/website-updates\/([a-z0-9._-]+)\.html$/i);
   if (detailMatch) {
     const updateId = detailMatch[1];

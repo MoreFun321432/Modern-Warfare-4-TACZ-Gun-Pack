@@ -64,7 +64,11 @@ function renderUpdate(update) {
   }
   const backLink = document.createElement("a");
   backLink.className = "button button-outline";
-  backLink.href = "./website-updates.html?v=20261025-11";
+  const siteBase = new URL(
+    document.documentElement.dataset.siteBase || "./",
+    document.baseURI
+  );
+  backLink.href = new URL("website-updates.html?v=20261025-11", siteBase);
   backLink.textContent = "返回网页更新";
   actions.append(backLink);
   header.append(copy, actions);
