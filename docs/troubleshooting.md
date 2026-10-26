@@ -34,23 +34,19 @@ software.bernie.geckolib ... Unable to parse animation: reload_tactical
 
 ## 三、进游戏后文字全变成白框
 
-这是**字体渲染失败**，不是枪包内容问题。本包是 TACZ 枪包，只包含 `assets/mw4/` 与 `data/mw4/`，
-没有 `pack.mcmeta`、`assets/minecraft/` 或任何 `font` 文件，所以它**无法覆盖游戏字体**
-（上面那条 `verify_gunpack_zip.py` 会直接把这一项列出来）。
+**1.8.2-Release 已经修复**，请先换到该版本。原因是枪包动画文件的问题，不是玩家环境：
 
-常见真实原因，按出现频率排：
+GeckoLib 会扫描所有命名空间的 `animations/*.animation.json`，TACZ 枪包的动画也在其中。
+GeckoLib 4.8.4 要求每个骨骼通道里**时间 0 的关键帧必须是第一个键**，而 1.8.1 及更早的
+MCX 动画有 9 个通道把 0.0 排在最后，于是 GeckoLib 抛
+`Invalid keyframe data - multiple starting keyframes`，整个资源重载失败，
+游戏里就表现为**所有文字变成白框**。
 
-- 枪包被放进了 `resourcepacks/` 当成资源包加载，同时还有别的资源包一起覆盖字体
-- 另一个资源包 / 汉化包提供了坏掉的字体（`assets/minecraft/font/default.json`）
-- OptiFine 的字体设置（强制 Unicode、字体缩放）与其它模组冲突
-- 内存不足，游戏构建字体图集失败 —— 这类通常伴随卡顿或贴图发白
+如果你还在旧版本并遇到这个现象：
 
-排查顺序：
-
-1. 确认枪包放的是 `.minecraft/tacz/`，不是 `.minecraft/resourcepacks/`
-2. 依次只留一个资源包，找出是哪一个把字打坏
-3. 关掉 OptiFine 的强制 Unicode 字体，或临时移除 OptiFine 验证
-4. 给游戏分配更多内存后重开
+- 换用 1.8.2-Release（动画已修正）
+- 用 `python tools/verify_gunpack_zip.py <枪包.zip>` 确认包内动画顺序正确
+- 同时确认枪包放在 `.minecraft/tacz/`，不是 `.minecraft/resourcepacks/`
 
 ## 四、GeckoLib 冲突
 

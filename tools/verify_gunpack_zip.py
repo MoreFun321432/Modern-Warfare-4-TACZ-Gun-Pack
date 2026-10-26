@@ -3,13 +3,13 @@
 """校验下载到的枪包 zip 是否完整（玩家 / 维护者都能跑）。
 
 用法:
-    python tools/verify_gunpack_zip.py "Modern Warfare 4-1.8.0-Release.zip"
+    python tools/verify_gunpack_zip.py "Modern Warfare 4-1.8.2-Release.zip"
 
 检查项:
   1. zip 的 CRC 是否全部通过（截断 / 坏块会在这里暴露）
   2. 关键文件是否齐全
   3. 所有 .animation.json 是否能正常解析
-  4. MCX 动画文件的大小与 SHA-256 是否与 1.8.0-Release 发布版一致
+  4. MCX 动画文件的大小与 SHA-256 是否与 1.8.2-Release 发布版一致
 
 只依赖标准库，不需要装任何东西。
 """
@@ -22,15 +22,16 @@ import zipfile
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# 1.8.1-Release 的基准值（来自 GitHub Release 附件）
-EXPECTED_ZIP_SHA256 = "4A2A142B3096144EDB09F8D4199F8610137892E865FC47F39CD7F8C3C7A62E69"
+# 1.8.2-Release 的基准值（来自 GitHub Release 附件）
+EXPECTED_ZIP_SHA256 = "7CCB54500A7E1E4579FEB9B9784019E2E5E0381C6596CD04B2FED9B46DE0CCE6"
 KNOWN_ZIP_SHA256 = {
-    "1.8.1-Release": EXPECTED_ZIP_SHA256,
+    "1.8.2-Release": EXPECTED_ZIP_SHA256,
+    "1.8.1-Release": "4A2A142B3096144EDB09F8D4199F8610137892E865FC47F39CD7F8C3C7A62E69",
     "1.8.0-Release": "AB53282FD70EDE2D2E3CA8A44556B020D2DA94636AC5584C697A6AB976E6B831",
 }
 MCX_ANIM = "assets/mw4/animations/mcx_spear_lt.animation.json"
 EXPECTED_MCX_SIZE = 3399647
-EXPECTED_MCX_SHA256 = "FFA9E4DDB6CBF257E1CE9F3A80D71AC7F1E08A37E3EFEA749EEE4F6B458C1C14"
+EXPECTED_MCX_SHA256 = "CCE012C12AC9C83B9CCE8244C8FD8AAFC0056537230916C813067C99772A2BC1"
 
 REQUIRED = (
     "assets/mw4/gunpack_info.json",
@@ -58,10 +59,10 @@ def main():
     print("大小:", size, "字节")
     print("SHA-256:", digest)
     if digest == EXPECTED_ZIP_SHA256:
-        print("  [OK] 与 1.8.1-Release 发布附件完全一致")
+        print("  [OK] 与 1.8.2-Release 发布附件完全一致")
     elif digest in KNOWN_ZIP_SHA256.values():
         old = [v for v, h in KNOWN_ZIP_SHA256.items() if h == digest][0]
-        print("  [注] 这是 %s 的包（可正常使用，但建议换成 1.8.1-Release）" % old)
+        print("  [注] 这是 %s 的包（建议换成 1.8.2-Release）" % old)
     else:
         print("  [注] 与已知的发布附件不同（如果你下的是其它版本可忽略）")
 
@@ -116,17 +117,37 @@ def main():
             problems.append("MCX 动画 JSON 解析失败: %s" % e)
 
     broken = []
+    bad_order = []
     for n in names:
         if n.endswith(".animation.json"):
             try:
-                json.loads(z.read(n).decode("utf-8"))
+                data = json.loads(z.read(n).decode("utf-8"))
             except Exception as e:
                 broken.append("%s (%s)" % (n, e))
+                continue
+            # GeckoLib 4.8.4 要求每个通道的 0.0 关键帧必须是第一个键，
+            # 否则整份动画解析失败 → 资源重载失败 → 游戏文字全变白框
+            for clip in (data.get("animations") or {}).values():
+                for chans in (clip.get("bones") or {}).values():
+                    for track in chans.values():
+                        if not isinstance(track, dict):
+                            continue
+                        for i, k in enumerate(track):
+                            try:
+                                t = float(k)
+                            except (TypeError, ValueError):
+                                t = 0.0
+                            if t == 0.0 and i != 0:
+                                bad_order.append("%s: %s" % (n, list(track)[:3]))
+                                break
     if broken:
         problems.append("这些动画文件解析失败: %s" % broken[:5])
+    elif bad_order:
+        problems.append("动画关键帧顺序不符合 GeckoLib 要求（0.0 必须在第一位）: %s"
+                        % bad_order[:3])
     else:
         ok = len([n for n in names if n.endswith(".animation.json")])
-        print("  [OK] %d 个动画文件全部可解析" % ok)
+        print("  [OK] %d 个动画文件全部可解析，关键帧顺序符合 GeckoLib 要求" % ok)
 
     print()
     if problems:
