@@ -7,7 +7,7 @@
       "summary": "修复 GitHub Contents API 回退时蓝奏云分流按钮名称显示为乱码的问题。",
       "changes": [
         "GitHub Contents API 的 Base64 内容改为按 UTF-8 解码。",
-        "提升下载配置模块缓存版本，确保浏览器加载修复后的脚本。"
+        "提升主页、日志页和下载配置模块缓存版本，确保浏览器加载修复后的脚本。"
       ],
       "bugFixes": [
         "修复主页国内分流按钮在 GitHub raw 不可用时显示中文乱码的问题。"
