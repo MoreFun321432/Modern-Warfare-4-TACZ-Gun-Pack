@@ -9,7 +9,7 @@ import {
 import {
   loadDomesticMirror,
   loadDownloadConfig
-} from "./download-config.js?v=20261025-2";
+} from "./download-config.js?v=20261025-3";
 import { bindDomesticMirrorCopy } from "./domestic-mirror.js?v=20261025-1";
 
 const list = document.querySelector("#changelog-list");

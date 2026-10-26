@@ -90,8 +90,8 @@ test("separates website releases from downloadable gun-pack releases", () => {
 
 test("keeps a repository-driven website update log", async () => {
   const updates = await readWebsiteUpdates();
-  assert.ok(updates.length >= 31);
-  assert.equal(updates[0].id, "website-v1.0.31");
+  assert.ok(updates.length >= 32);
+  assert.equal(updates[0].id, "website-v1.0.32");
   assert.ok(Array.isArray(updates[0].changes));
   assert.equal("downloadUrl" in updates[0], false);
 });
@@ -223,7 +223,9 @@ test("serves health and local gun pack data", async (t) => {
 
   const domesticMirrorResponse = await fetch(`${baseUrl}/api/domestic-mirror`);
   assert.equal(domesticMirrorResponse.status, 200);
-  assert.equal((await domesticMirrorResponse.json()).password, "6wgt");
+  const domesticMirror = await domesticMirrorResponse.json();
+  assert.match(domesticMirror.url, /^https:\/\/[^/]*lanzou/i);
+  assert.ok(domesticMirror.password.length > 0);
 
   const adminPageResponse = await fetch(`${baseUrl}/admin/`);
   assert.equal(adminPageResponse.status, 200);

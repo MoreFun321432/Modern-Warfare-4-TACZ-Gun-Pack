@@ -1,6 +1,21 @@
 {
   "updates": [
     {
+      "id": "website-v1.0.32",
+      "title": "蓝奏云配置改为实时优先读取",
+      "publishedAt": "2026-10-26T05:27:03Z",
+      "summary": "主页优先读取 GitHub 仓库中的最新蓝奏云配置，并在切回页面时立即复查地址和密码。",
+      "changes": [
+        "蓝奏云配置优先读取 GitHub raw 文件，不再先等待 Pages 静态快照。",
+        "页面重新获得焦点或切回前台时立即刷新蓝奏云地址与密码。",
+        "GitHub raw 不可用时自动回退到 Pages 静态快照。"
+      ],
+      "bugFixes": [
+        "修复手动修改蓝奏云地址或密码后主页短时间仍显示旧值的问题。"
+      ],
+      "releaseUrl": null
+    },
+    {
       "id": "website-v1.0.31",
       "title": "页脚加入网页与后端维护信息",
       "publishedAt": "2026-10-25T16:31:02Z",

@@ -12,7 +12,7 @@ import {
   accelerateDownloadUrl,
   loadDomesticMirror,
   loadDownloadConfig
-} from "./download-config.js?v=20261025-2";
+} from "./download-config.js?v=20261025-3";
 import { bindDomesticMirrorCopy } from "./domestic-mirror.js?v=20261025-1";
 
 const elements = {
@@ -88,18 +88,28 @@ async function refreshDownloadAccelerator() {
   if (currentDownloadUrl) applyDownloadLinks(currentDownloadUrl);
 }
 
+let domesticMirrorInFlight = false;
+let lastDomesticMirrorAt = 0;
+
 async function loadDomesticMirrorLink() {
-  const mirror = await loadDomesticMirror();
-  if (!mirror) {
-    elements.downloadLanzou.hidden = true;
-    return;
+  if (domesticMirrorInFlight) return;
+  domesticMirrorInFlight = true;
+  try {
+    const mirror = await loadDomesticMirror();
+    if (!mirror) {
+      elements.downloadLanzou.hidden = true;
+      return;
+    }
+    elements.downloadLanzou.href = mirror.url;
+    elements.downloadLanzou.textContent = mirror.password
+      ? `${mirror.label} · 密码 ${mirror.password}`
+      : mirror.label;
+    elements.downloadLanzou.hidden = false;
+    bindDomesticMirrorCopy(elements.downloadLanzou, mirror);
+  } finally {
+    lastDomesticMirrorAt = Date.now();
+    domesticMirrorInFlight = false;
   }
-  elements.downloadLanzou.href = mirror.url;
-  elements.downloadLanzou.textContent = mirror.password
-    ? `${mirror.label} · 密码 ${mirror.password}`
-    : mirror.label;
-  elements.downloadLanzou.hidden = false;
-  bindDomesticMirrorCopy(elements.downloadLanzou, mirror);
 }
 
 function createGunCard(gun, index) {
@@ -334,9 +344,12 @@ applyDownloadLinks(releasesUrl);
 refreshPublicData();
 setInterval(refreshPublicData, AUTO_REFRESH_MS);
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && Date.now() - lastRefreshAt >= AUTO_REFRESH_MS) {
-    refreshPublicData();
-  }
+  if (document.visibilityState !== "visible") return;
+  if (Date.now() - lastDomesticMirrorAt >= 30_000) loadDomesticMirrorLink();
+  if (Date.now() - lastRefreshAt >= AUTO_REFRESH_MS) refreshPublicData();
+});
+window.addEventListener("focus", () => {
+  if (Date.now() - lastDomesticMirrorAt >= 30_000) loadDomesticMirrorLink();
 });
 
 let scrollFrame = 0;
