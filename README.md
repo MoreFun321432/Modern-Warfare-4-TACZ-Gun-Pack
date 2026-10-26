@@ -68,6 +68,10 @@ Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空
 - 国内用户可通过蓝奏云分流下载，网页会显示当前分享密码。
 - 包含响应式中文展示页、健康检查、自动化测试和 Dockerfile。
 
+下载后如果提示动画文件损坏或出现 GeckoLib 报错，先按
+[`docs/troubleshooting.md`](./docs/troubleshooting.md) 用
+`python tools/verify_gunpack_zip.py <枪包.zip>` 核对文件完整性
+
 从仓库根目录启动：
 
 ```powershell
