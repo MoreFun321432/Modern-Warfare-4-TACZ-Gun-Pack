@@ -84,6 +84,21 @@ def main():
     else:
         print("  [OK] 关键文件齐全（%d 个条目）" % len(names))
 
+    # 本包是 TACZ 枪包，只应有 assets/mw4 与 data/mw4。
+    # 一旦出现资源包级别的文件（pack.mcmeta、assets/minecraft/**、font），
+    # 被当成资源包加载时可能覆盖游戏字体，表现就是文字全变白框。
+    risky = sorted(
+        n for n in names
+        if n == "pack.mcmeta"
+        or n.startswith("assets/minecraft/")
+        or "/font/" in n
+        or n.startswith("font/")
+    )
+    if risky:
+        problems.append("包里出现资源包级别文件（可能导致字体异常）: %s" % risky[:5])
+    else:
+        print("  [OK] 不含 pack.mcmeta / assets/minecraft / font，不会覆盖游戏字体")
+
     if MCX_ANIM not in names:
         problems.append("找不到 MCX 动画文件")
     else:
