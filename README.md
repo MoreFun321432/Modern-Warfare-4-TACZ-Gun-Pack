@@ -7,7 +7,7 @@
 [![Gun pack: GPL--3.0](https://img.shields.io/badge/gun%20pack-GPL--3.0-orange)](./GUNPACK-LICENSE.md)
 
 Modern Warfare 4 是面向 Minecraft Forge 1.20.1 与 TACZ 的枪包，命名空间为
-`mw4`。当前版本为 **1.8.0-Release**，包含 14 把枪、弹药、配件、换弹状态机和
+`mw4`。当前版本为 **1.8.1-Release**，包含 14 把枪、弹药、配件、换弹状态机和
 仓库联动网页。
 
 在线网页：<https://skydeps1459.github.io/Modern-Warfare-4-TACZ-GunPack/>

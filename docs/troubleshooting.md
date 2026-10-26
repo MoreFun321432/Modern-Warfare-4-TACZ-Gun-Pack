@@ -2,16 +2,16 @@
 
 ## 一、确认下载的包有没有损坏
 
-先对一下 Release 页面「校验」里的 SHA-256，当前 1.8.0-Release 是：
+先对一下 Release 页面「校验」里的 SHA-256，当前 1.8.1-Release 是：
 
 ```
-AB53282FD70EDE2D2E3CA8A44556B020D2DA94636AC5584C697A6AB976E6B831
+4A2A142B3096144EDB09F8D4199F8610137892E865FC47F39CD7F8C3C7A62E69
 ```
 
 Windows 上可以直接跑仓库里的脚本逐项检查（不用装任何东西）：
 
 ```
-python tools/verify_gunpack_zip.py "Modern Warfare 4-1.8.0-Release.zip"
+python tools/verify_gunpack_zip.py "Modern Warfare 4-1.8.1-Release.zip"
 ```
 
 它会检查 zip 有没有坏块、关键文件是否齐全、所有动画 JSON 能不能解析，并单独比对 MCX 动画文件。
@@ -20,7 +20,7 @@ python tools/verify_gunpack_zip.py "Modern Warfare 4-1.8.0-Release.zip"
 
 - 重新下载，优先用 GitHub Release 附件，蓝奏云分流偶尔会被浏览器截断
 - 用 7-Zip 或 WinRAR 完整解压，不要在压缩软件里直接预览、也不要只拖一部分文件出来
-- 下载体积应该接近 25.0 MB（26,229,060 字节）
+- 下载体积应该接近 25.0 MB（26,227,920 字节）
 
 ## 二、日志里提示动画文件损坏
 

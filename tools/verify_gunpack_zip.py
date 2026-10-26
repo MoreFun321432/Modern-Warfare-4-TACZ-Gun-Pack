@@ -22,8 +22,12 @@ import zipfile
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# 1.8.0-Release 的基准值（来自 GitHub Release 附件）
-EXPECTED_ZIP_SHA256 = "AB53282FD70EDE2D2E3CA8A44556B020D2DA94636AC5584C697A6AB976E6B831"
+# 1.8.1-Release 的基准值（来自 GitHub Release 附件）
+EXPECTED_ZIP_SHA256 = "4A2A142B3096144EDB09F8D4199F8610137892E865FC47F39CD7F8C3C7A62E69"
+KNOWN_ZIP_SHA256 = {
+    "1.8.1-Release": EXPECTED_ZIP_SHA256,
+    "1.8.0-Release": "AB53282FD70EDE2D2E3CA8A44556B020D2DA94636AC5584C697A6AB976E6B831",
+}
 MCX_ANIM = "assets/mw4/animations/mcx_spear_lt.animation.json"
 EXPECTED_MCX_SIZE = 3399647
 EXPECTED_MCX_SHA256 = "FFA9E4DDB6CBF257E1CE9F3A80D71AC7F1E08A37E3EFEA749EEE4F6B458C1C14"
@@ -54,9 +58,12 @@ def main():
     print("大小:", size, "字节")
     print("SHA-256:", digest)
     if digest == EXPECTED_ZIP_SHA256:
-        print("  [OK] 与 1.8.0-Release 发布附件完全一致")
+        print("  [OK] 与 1.8.1-Release 发布附件完全一致")
+    elif digest in KNOWN_ZIP_SHA256.values():
+        old = [v for v, h in KNOWN_ZIP_SHA256.items() if h == digest][0]
+        print("  [注] 这是 %s 的包（可正常使用，但建议换成 1.8.1-Release）" % old)
     else:
-        print("  [注] 与已知的 1.8.0-Release 附件不同（如果你下的是其它版本可忽略）")
+        print("  [注] 与已知的发布附件不同（如果你下的是其它版本可忽略）")
 
     try:
         z = zipfile.ZipFile(path)

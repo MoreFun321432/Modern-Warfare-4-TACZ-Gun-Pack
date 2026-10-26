@@ -7,7 +7,7 @@
 [![Gun pack: GPL--3.0](https://img.shields.io/badge/gun%20pack-GPL--3.0-orange)](./GUNPACK-LICENSE.md)
 
 Modern Warfare 4 is a TACZ gun pack for Minecraft Forge 1.20.1 with the
-namespace `mw4`. The current release is **1.8.0-Release**, containing 14 guns,
+namespace `mw4`. The current release is **1.8.1-Release**, containing 14 guns,
 ammunition, attachments, reload state machines, and a repository-linked
 website.
 

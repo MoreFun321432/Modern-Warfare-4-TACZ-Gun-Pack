@@ -1,11 +1,11 @@
 {
-  "version": "1.8.0-Release",
+  "version": "1.8.1-Release",
   "name": "Modern Warfare 4",
   "desc": "pack.mw4.scar_h_pack.desc",
   "license": "GPL-3.0",
   "authors": [
     "MoreFun"
   ],
-  "date": "2026-10-18",
+  "date": "2026-10-26",
   "url": "https://tacwiki.mcma.club/zh/"
 }
